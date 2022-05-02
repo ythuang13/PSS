@@ -13,6 +13,9 @@ class Task:
     def getStartTime(self) -> float:
         return self._start_time
 
+    def displayTask(self) -> None:
+        pass
+
 class RecurringTask(Task):
     def __init__(self, name: str, duration: float, startTime: float,
             type: str, startDate: int, endDate: int, frequency: int):
