@@ -37,6 +37,9 @@ class RecurringTask(Task):
     def getFrequency(self) -> int:
         return self._frequency
 
+    def displayTask(self) -> None:
+        pass
+
 class TransientTask(Task):
     def __init__(self, name: str, duration: float, startTime: float,
             type: str, date: int):
@@ -49,6 +52,9 @@ class TransientTask(Task):
     
     def getDate(self) -> int:
         return self._date
+
+    def displayTask(self) -> None:
+        pass
     
 class AntiTask(Task):
     def __init__(self, name: str, duration: float, startTime: float,
@@ -58,4 +64,7 @@ class AntiTask(Task):
     
     def getDate(self) -> int:
         return self._date
+
+    def displayTask(self) -> None:
+        pass
     
