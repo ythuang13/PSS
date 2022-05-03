@@ -67,6 +67,13 @@ class PSS:
         Time must be correct format, no conflic, name must be unique.
         """
         return True
+    
+    def timeVerification(self, time: float) -> bool:
+        """Check whether the time is valid or not.
+        Time must be a positive number from 0 to 23.75
+        round to nearest 15 mins (0.25)
+        """
+        return True
 
     def nameVerification(self) -> bool:
         """Return True if name is uniqe, else False"""
