@@ -72,20 +72,19 @@ class PSS:
         else:
             file_path = input("Enter file path: ")
         
-        if self.fileVerification(file_path):
-            json_string = open(file_path, 'r').read()
-            if self.jsonVerification(json_string):
-                # file exists and in json format
-                # now load in date in pss
-                data = json.loads(json_string)
-                for task in data:
-                    task_name = task.get('Name', None)
-                    task_type = task.get('Type', None)
+        if not self.fileVerification(file_path):
+            return False
+        json_string = open(file_path, 'r').read()
+        if self.jsonVerification(json_string):
+            # file exists and in json format
+            # now load in date in pss
+            data = json.loads(json_string)
+            for task in data:
+                task_name = task.get('Name', None)
+                task_type = task.get('Type', None)
 
-                    # determine by the task_type, have different attributes
+                # determine by the task_type, have different attributes
 
-            else:
-                return False
         else:
             return False
         
