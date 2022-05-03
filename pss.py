@@ -1,7 +1,13 @@
+import json
+from task import Task
+
 class PSS:
     def __init__(self) -> None:
         self._tasksList = []
         self._defaultFilePath = "data.json"
+
+        if not self.fileVerification(self._defaultFilePath):
+            open(self._defaultFilePath, 'w').close()
 
     def createTask(self) -> None:
         """User select type of task, pss verify data including,
@@ -36,7 +42,7 @@ class PSS:
         """
         pass
 
-    def readFromFile(self, default=False) -> None:
+    def readFromFile(self, default=False) -> bool:
         """Default is to read from default file path.
         otherwise, ask user for file name, check validity,
         and read schedule to the file using JSON format.
@@ -44,8 +50,31 @@ class PSS:
         Default is to do all, but user can specify for day, week, month and its start date.
         @param default: True if default file path is use, otherwise 
         ask for user input
+        @return True if read successfully, anaything else False
         """
-        pass
+        if default:
+            file_path = self._defaultFilePath
+        else:
+            file_path = input("Enter file path: ")
+        
+        if self.fileVerification(file_path):
+            json_string = open(file_path, 'r').read()
+            if self.jsonVerification(json_string):
+                # file exists and in json format
+                # now load in date in pss
+                data = json.loads(json_string)
+                for task in data:
+                    task_name = task.get('Name', None)
+                    task_type = task.get('Type', None)
+
+                    # determine by the task_type, have different attributes
+
+            else:
+                return False
+        else:
+            return False
+        
+        return True
 
     def viewSchedule(self) -> None:
         """User input the start date and the period for the schedule.
@@ -54,15 +83,23 @@ class PSS:
         """
         pass
 
-    def fileVerification(self) -> bool:
+    def fileVerification(self, file_path: str) -> bool:
         """Check if the file is exists or not"""
-        return True
+        try:
+            with open(file_path, 'r') as file:
+                return True
+        except FileNotFoundError:
+            return False
 
-    def jsonVerification(self) -> bool:
-        """Check if the file is in valid JSON format or not"""
-        return True
+    def jsonVerification(self, json_string: str) -> bool:
+        """Check if the string is in valid JSON format or not"""
+        try:
+            json.loads(json_string)
+            return True
+        except json.decoder.JSONDecodeError as err:
+            return False
 
-    def taskVerification(self) -> bool:
+    def taskVerification(self, task: Task) -> bool:
         """ Check whether the task is valid or not.
         Time must be correct format, no conflic, name must be unique.
         """
@@ -75,11 +112,11 @@ class PSS:
         """
         return True
 
-    def nameVerification(self) -> bool:
+    def nameVerification(self, task_name: str) -> bool:
         """Return True if name is uniqe, else False"""
         return True
 
-    def dateVerification(self, type: str) -> bool:
+    def dateVerification(self, date: float, task_type: str) -> bool:
         """Check if the date is valid or not
         Date format: YYYYMMDD
         month range from [01-12], day range from [01-last day of the month]

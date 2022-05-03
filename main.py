@@ -23,7 +23,9 @@ def main():
     # initialize PSS
     pss = PSS()
     # initial load default file to have persistence data
-    pss.readFromFile(default=True)
+    if not pss.readFromFile(default=True):
+        print("Default file corrupted, please fix or delete.")
+        return
 
     # main loop
     running = True
