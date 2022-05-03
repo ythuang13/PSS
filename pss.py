@@ -40,7 +40,22 @@ class PSS:
         @param default: True if default file path is use, otherwise 
             ask for user input
         """
-        pass
+        if default:
+            file_path = self._defaultFilePath
+        else:
+            file_path = input("Enter file path: ")
+
+        # file verification
+        if not self.fileVerification(file_path):
+            return False
+        
+        # todo, user specify day
+
+        # dumps json to file
+        with open(file_path, "w") as file:
+            file.write(json.dumps(self._tasksList))
+
+        return True
 
     def readFromFile(self, default=False) -> bool:
         """Default is to read from default file path.
