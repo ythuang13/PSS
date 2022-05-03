@@ -32,3 +32,5 @@ TRANSIENT_TASKS = [
     "Shopping",
     "Appointment"
 ]
+
+ANTI_TASKS = ["Cancellation"]
