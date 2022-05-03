@@ -114,6 +114,10 @@ class PSS:
 
     def nameVerification(self, task_name: str) -> bool:
         """Return True if name is uniqe, else False"""
+        for task in self._tasksList:
+            name = task.get("Name", None)
+            if task_name == name:
+                return False
         return True
 
     def dateVerification(self, date: float, task_type: str) -> bool:
