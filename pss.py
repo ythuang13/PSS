@@ -1,5 +1,6 @@
 import json
 from task import Task
+from setting import *
 
 class PSS:
     def __init__(self) -> None:
@@ -75,18 +76,43 @@ class PSS:
         if not self.fileVerification(file_path):
             return False
         json_string = open(file_path, 'r').read()
-        if self.jsonVerification(json_string):
-            # file exists and in json format
-            # now load in date in pss
-            data = json.loads(json_string)
-            for task in data:
-                task_name = task.get('Name', None)
-                task_type = task.get('Type', None)
-
-                # determine by the task_type, have different attributes
-
-        else:
+        if not self.jsonVerification(json_string):
             return False
+
+        # file exists and in json format
+        # load in date in pss
+        data = json.loads(json_string)
+        # loop through data to determine if it can be load in pss
+        for task in data:
+            task_name = task.get('Name', None)
+            task_duration = task.get('Duration', None)
+            task_start_time = task.get('StartTime', None)
+            task_type = task.get('Type', "Cancellation")
+            
+            task_start_date = None
+            task_end_date = None
+            task_frequency = None
+            task_date = None
+
+            # determine by the task_type, have different attributes
+            if task_type in RECURRING_TASKS:
+                # recurring task
+                task_start_date = task.get('StartDate', None)
+                task_end_date = task.get('EndDate', None)
+                task_frequency = task.get('Frequency', None)
+            elif task_type in TRANSIENT_TASKS:
+                # transient task
+                task_date = task.get('Date', None)
+            elif task_type in ANTI_TASKS:
+                # anti-task, cancellation
+                task_date = task.get('Date', None)
+            else:
+                # invalid task type, big no no
+                pass
+            
+            # date verification
+
+            # if everything pass, load task in pss
         
         return True
 
