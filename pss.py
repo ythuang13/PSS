@@ -164,7 +164,6 @@ class PSS:
         """Check if the date is valid or not
         Date format: YYYYMMDD
         month range from [01-12], day range from [01-last day of the month]
-        end date must be later than start date.
         @param type: recurring, transient or anti
         """
         # len 8 check
@@ -184,13 +183,15 @@ class PSS:
             return False
         
         # day check
-        if month in [1,3,5,7,8,10,12]:
-            pass
-        elif month in [4,6,9,11]:
-            pass
+        if month in [1, 3, 5, 7, 8, 10, 12]:
+            if day not in range(1, 32):
+                return False
+        elif month in [4, 6, 9, 11]:
+            if day not in range(1, 31):
+                return False
         else:
-            pass
-
+            if day not in range(1, 29):
+                return False
 
         return True
 
