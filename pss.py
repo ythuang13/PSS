@@ -200,7 +200,12 @@ class PSS:
         else:
             return False
         return True
-
+        
+    def frequencyVerification(self, frequency: int) -> bool:
+        """Check whether the frequency is valid or not."""
+        if frequency not in FREQUENCIES:
+            return False
+            
     def dateVerification(self, date: int, task_type: str) -> bool:
         """Check if the date is valid or not
         Date format: YYYYMMDD
