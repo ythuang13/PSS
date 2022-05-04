@@ -150,6 +150,11 @@ class PSS:
         Time must be a positive number from 0 to 23.75
         round to nearest 15 mins (0.25)
         """
+        temp_time: float = time * 100
+        if temp_time % 25 != 0:
+            return False
+        if temp_time < 0 or temp_time > 2375:
+            return False
         return True
 
     def nameVerification(self, task_name: str) -> bool:
