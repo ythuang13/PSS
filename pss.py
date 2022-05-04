@@ -179,6 +179,13 @@ class PSS:
                 return False
         return True
 
+    def durationVerification(self, task_duration: float) -> bool:
+        """Check whether the duration is valid or not."""
+        temp_duration: float = task_duration * 100
+        if temp_duration < 0 or temp_duration > 2375:
+            return False
+        return True
+
     def dateVerification(self, date: int, task_type: str) -> bool:
         """Check if the date is valid or not
         Date format: YYYYMMDD
