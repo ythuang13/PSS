@@ -186,6 +186,21 @@ class PSS:
             return False
         return True
 
+    def typeVerification(self, task: Task, type: str) -> bool:
+        """Check whether the type is valid or not."""
+        if type(task) is RecurringTask:
+            if type not in RECURRING_TASKS:
+                return False
+        elif type(task) is TransientTask:
+            if type not in TRANSIENT_TASKS:
+                return False
+        elif type(task) is AntiTask:
+            if type not in ANTI_TASKS:
+                return False
+        else:
+            return False
+        return True
+
     def dateVerification(self, date: int, task_type: str) -> bool:
         """Check if the date is valid or not
         Date format: YYYYMMDD
