@@ -34,3 +34,5 @@ TRANSIENT_TASKS = [
 ]
 
 ANTI_TASKS = ["Cancellation"]
+
+FREQUENCIES = [1, 7]
