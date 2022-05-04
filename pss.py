@@ -1,5 +1,5 @@
 import json
-from task import Task
+from task import Task, RecurringTask, TransientTask, AntiTask
 from setting import *
 
 class PSS:
@@ -95,24 +95,32 @@ class PSS:
             task_date = None
 
             # determine by the task_type, have different attributes
+            new_task = None
             if task_type in RECURRING_TASKS:
                 # recurring task
                 task_start_date = task.get('StartDate', None)
                 task_end_date = task.get('EndDate', None)
                 task_frequency = task.get('Frequency', None)
+                new_task = RecurringTask(task_name, task_duration,
+                    task_start_time, task_type, task_start_date,
+                    task_end_date, task_frequency)
             elif task_type in TRANSIENT_TASKS:
                 # transient task
                 task_date = task.get('Date', None)
+                new_task = TransientTask(task_name, task_duration,
+                    task_start_time, task_type, task_date)
             elif task_type in ANTI_TASKS:
                 # anti-task, cancellation
                 task_date = task.get('Date', None)
+                new_task = AntiTask(task_name, task_duration,
+                    task_start_time, task_date)
             else:
                 # invalid task type, big no no
                 pass
-            
-            # date verification
 
-            # if everything pass, load task in pss
+            # if task verified, load into pss
+            if self.taskVerification(new_task):
+                self._tasksList.append(new_task)
         
         return True
 
@@ -143,6 +151,12 @@ class PSS:
         """ Check whether the task is valid or not.
         Time must be correct format, no conflic, name must be unique.
         """
+        if type(task) is RecurringTask:
+            print("RecurringTask")
+        elif type(task) is TransientTask:
+            print("TransientTask")
+        else:
+            print("AntiTask")
         return True
     
     def timeVerification(self, time: float) -> bool:
