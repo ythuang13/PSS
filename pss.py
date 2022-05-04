@@ -160,13 +160,38 @@ class PSS:
                 return False
         return True
 
-    def dateVerification(self, date: float, task_type: str) -> bool:
+    def dateVerification(self, date: int, task_type: str) -> bool:
         """Check if the date is valid or not
         Date format: YYYYMMDD
         month range from [01-12], day range from [01-last day of the month]
         end date must be later than start date.
         @param type: recurring, transient or anti
         """
+        # len 8 check
+        if len(str(date)) != 8:
+            return False
+        
+        # separate into year, month, day
+        day = date % 100
+        month = (date / 100) % 100
+        year = (date / 10000)
+        
+        # year check
+        # if we need to check year
+
+        # month check
+        if month not in range(1, 13):
+            return False
+        
+        # day check
+        if month in [1,3,5,7,8,10,12]:
+            pass
+        elif month in [4,6,9,11]:
+            pass
+        else:
+            pass
+
+
         return True
 
     def generateSchedule() -> None:
