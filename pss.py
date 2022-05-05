@@ -39,21 +39,37 @@ class PSS:
         If found, display the task else display not found"""
         running = True
         while running:
-            name_input = input("Enter name of the task to find (empty to exit): ")
+            printHeader("Find Task")
+            name_input = input("Enter the name of the task to find (empty to exit): ")
             if name_input == "":
                 return
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
-                        print(task)
+                        print(task, end="")
+                        input("")
+                        running = False
+                        break
                 else:
-                    print("No task found")
+                    print(f"No task with name: {name_input} is found.")
         
 
     def deleteTask(self) -> None:
         """User select task to delete using task name.
         If found, validate if delete anti-task would create conflict,
         also delete recurring task and its anti-task together"""
+        name_input = input("Enter the name of the task to delete (empty to exit): ")
+        if name_input == "":
+            return 
+        else:
+            for task in self._tasksList:
+                if task.getName() == name_input:
+                    print(task, end="")
+                    input("")
+                    running = False
+                    break
+            else:
+                print(f"No task with name: {name_input} is found.")
         
 
     def editTask(self) -> None:
