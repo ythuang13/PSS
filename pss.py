@@ -272,6 +272,9 @@ class PSS:
 
     def nameVerification(self, task_name: str) -> bool:
         """Return True if name is uniqe, else False"""
+        if task_name == "":
+            return False
+            
         for task in self._tasksList:
             name = task.getName()
             if task_name == name:
