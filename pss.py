@@ -147,18 +147,76 @@ class PSS:
         except json.decoder.JSONDecodeError as err:
             return False
 
-    def taskVerification(self, task: Task) -> bool:
+    def taskVerification(self, task: RecurringTask or TransientTask or AntiTask) -> bool:
         """ Check whether the task is valid or not.
         Time must be correct format, no conflic, name must be unique.
         """
+        # check name uniqueness
+        if not self.nameVerification(task.getName()):
+            return False
+
+        # check type
+        if not self.typeVerification(task, task.getType()):
+            return False
+
+        # check duration
+        if not self.durationVerification(task.getDuration()):
+            return False
+
+        # check time 
+        if not self.timeVerification(task.getStartTime()):
+            return False
+
+        # type specific verification
         if type(task) is RecurringTask:
-            print("RecurringTask")
+            # check start date and end date
+            if not self.dateVerification(task.getStartDate()):
+                return False
+            if not self.dateVerification(task.getEndDate()):
+                return False
+
+            # check frequency
+            if not self.frequencyVerification(task.getFrequency()):
+                return False
+
+            # check end date after start date
+            if task.getEndDate() < task.getStartDate():
+                return False
+            
         elif type(task) is TransientTask:
-            print("TransientTask")
+            # check date
+            if not self.dateVerification(task.getDate()):
+                return False
+
+        elif type(task) is AntiTask:
+            # check date
+            if not self.dateVerification(task.getDate()):
+                return False
+
+            # check for matchup with an instance of recurring task
+            # only one anti-task can for one instance of recurring task
         else:
-            print("AntiTask")
+            return False
+
+        # check overlap
+        if not self.overlapVerification(task):
+            return False
+
         return True
     
+    def overlapVerification(self, task: RecurringTask or TransientTask or AntiTask) -> bool:
+        """Check if the task is overlap with other task or not"""
+        if type(task) is RecurringTask:
+            pass
+        elif type(task) is TransientTask:
+            pass
+        elif type(task) is AntiTask:
+            pass
+        else:
+            return False
+
+        return True
+
     def timeVerification(self, time: float) -> bool:
         """Check whether the time is valid or not.
         Time must be a positive number from 0 to 23.75
@@ -205,7 +263,7 @@ class PSS:
         """Check whether the frequency is valid or not."""
         if frequency not in FREQUENCIES:
             return False
-            
+
     def dateVerification(self, date: int, task_type: str) -> bool:
         """Check if the date is valid or not
         Date format: YYYYMMDD
