@@ -81,7 +81,6 @@ class AntiTask(Task):
         self._date = date
 
         assert isinstance(self._date, int)
-        assert self._type in ANTI_TASKS
     
     def getDate(self) -> int:
         return self._date
