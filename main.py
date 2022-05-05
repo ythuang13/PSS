@@ -16,6 +16,7 @@ def main():
     # main loop
     running = True
     while running:
+        printHeader("Main Menu")
         print(MAIN_MENU)
         option = input("Enter option: ")
         if option == "1":
@@ -37,6 +38,7 @@ def main():
 def manageTask(pss: PSS) -> None:
     running = True
     while running:
+        printHeader("Manage Task")
         print(TASKS_MENU)
         option = input("Enter option: ")
         if option == "1":
@@ -60,6 +62,7 @@ def manageTask(pss: PSS) -> None:
 def manageSchedule(pss: PSS) -> None:
     running = True
     while running:
+        printHeader("Manage Schedule")
         print(SCHEDULE_MENU)
         option = input("Enter option: ")
         if option == "1":
