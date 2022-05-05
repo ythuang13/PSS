@@ -6,9 +6,9 @@ class Task:
         self._name = name
         self._duration = duration
         self._start_time = startTime
-        assert type(self._name) == str
-        assert type(self._duration) == float
-        assert type(self._start_time) == float
+        assert isinstance(self._name, str)
+        assert isinstance(self._duration, float)
+        assert isinstance(self._start_time, float)
     
     def getName(self) -> str:
         return self._name
@@ -31,10 +31,10 @@ class RecurringTask(Task):
         self._end_date = endDate
         self._frequency = frequency
 
-        assert type(self._type) == str
-        assert type(self._start_date) == int
-        assert type(self._end_date) == int
-        assert type(self._frequency) == int
+        assert isinstance(self._type, str)
+        assert isinstance(self._start_date, int)
+        assert isinstance(self._end_date, int)
+        assert isinstance(self._frequency, int)
         assert self._start_date <= self._end_date
         assert self._frequency in FREQUENCIES
         assert self._type in RECURRING_TASKS
