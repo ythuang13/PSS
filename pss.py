@@ -46,7 +46,7 @@ class PSS:
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
-                        print(task)
+                        task.displayTask()
                         input("Press enter to exit")
                         running = False
                         break
