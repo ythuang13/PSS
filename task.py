@@ -61,8 +61,8 @@ class TransientTask(Task):
         self._type = type
         self._date = date
 
-        assert type(self._type) == str
-        assert type(self._date) == int
+        assert isinstance(self._type, str)
+        assert isinstance(self._date, int)
         assert self._type in TRANSIENT_TASKS
     
     def getType(self) -> str:
@@ -80,7 +80,7 @@ class AntiTask(Task):
         super().__init__(name, duration, startTime)
         self._date = date
 
-        assert type(self._date) == int
+        assert isinstance(self._date, int)
         assert self._type in ANTI_TASKS
     
     def getDate(self) -> int:
