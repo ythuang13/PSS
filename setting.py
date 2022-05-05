@@ -17,6 +17,14 @@ SCHEDULE_MENU = """
 3. view schedule
 4. Back to main menu"""
 
+CREATE_TASK_MENU = """
+1. Create Recurring task
+2. Create Transient task
+3. Create Anti-task
+4. Back to Manage Task
+"""
+
+
 # constants
 RECURRING_TASKS = [
     "Class",
@@ -26,6 +34,7 @@ RECURRING_TASKS = [
     "Work",
     "Meal"
 ]
+
 
 TRANSIENT_TASKS = [
     "Visit",
