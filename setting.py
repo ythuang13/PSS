@@ -1,3 +1,5 @@
+import os
+
 # menus
 MAIN_MENU = """
 1. Manage task
@@ -45,3 +47,19 @@ TRANSIENT_TASKS = [
 ANTI_TASKS = ["Cancellation"]
 
 FREQUENCIES = [1, 7]
+
+# special functions
+def printHeader(title: str) -> None:
+    '''print header with title'''
+    def clearConsole() -> None:
+        '''clear the console'''
+        command = 'clear'
+        if os.name in ('nt', 'dos'):
+            command = 'cls'
+        os.system(command)
+
+    clearConsole()
+    print("\n" + "=" * 30)
+    print("{:^30}".format(title))
+    print("=" * 30 + "\n")
+

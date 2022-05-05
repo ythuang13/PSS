@@ -87,19 +87,5 @@ def manageSchedule(pss: PSS) -> None:
         else:
             print("Invalid option")
 
-def printHeader(title: str) -> None:
-    '''print header with title'''
-    clearConsole()
-    print("\n" + "=" * 30)
-    print("{:^30}".format(title))
-    print("=" * 30 + "\n")
-
-def clearConsole() -> None:
-    '''clear the console'''
-    command = 'clear'
-    if os.name in ('nt', 'dos'):
-        command = 'cls'
-    os.system(command)
-
 if __name__ == '__main__':
     main()
