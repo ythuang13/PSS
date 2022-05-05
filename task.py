@@ -84,6 +84,9 @@ class AntiTask(Task):
     
     def getDate(self) -> int:
         return self._date
+    
+    def getType(self) -> str:
+        return "Cancellation"
 
     def displayTask(self) -> None:
         pass
