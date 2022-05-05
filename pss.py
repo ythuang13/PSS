@@ -58,25 +58,45 @@ class PSS:
         """User select task to delete using task name.
         If found, validate if delete anti-task would create conflict,
         also delete recurring task and its anti-task together"""
-        name_input = input("Enter the name of the task to delete (empty to exit): ")
-        if name_input == "":
-            return 
-        else:
-            for task in self._tasksList:
-                if task.getName() == name_input:
-                    print(task, end="")
-                    input("")
-                    running = False
-                    break
+        running = True
+        while running:
+            printHeader("Delete Task")
+            name_input = input("Enter the name of the task to delete (empty to exit): ")
+            if name_input == "":
+                return 
             else:
-                print(f"No task with name: {name_input} is found.")
+                for task in self._tasksList:
+                    if task.getName() == name_input:
+                        print(task, end="")
+                        input("")
+                        # todo delete here, but need to check for conflict
+                        running = False
+                        break
+                else:
+                    print(f"No task with name: {name_input} is found.")
         
 
     def editTask(self) -> None:
         """User select task to edit using task name.
         If found, editor display the current attributes of the task
         and ask user to edit the attributes."""
-        pass
+        running = True
+        while running:
+            printHeader("Edit Task")
+
+            name_input = input("Enter the name of the task to edit (empty to exit): ")
+            if name_input == "":
+                return 
+            else:
+                for task in self._tasksList:
+                    if task.getName() == name_input:
+                        print(task, end="")
+                        input("")
+                        # todo edit here, check conflict still
+                        running = False
+                        break
+                else:
+                    print(f"No task with name: {name_input} is found ")
 
     def writeToFile(self, default=False) -> None:
         """Default is to write to default file path.
