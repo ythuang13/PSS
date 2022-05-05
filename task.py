@@ -52,7 +52,10 @@ class RecurringTask(Task):
         return self._frequency
 
     def displayTask(self) -> None:
-        pass
+        print(f"{self._name}: {self._type}, {'daily' if self._frequency == 1 else 'weekly'}")
+        print(f"Date: {self._start_date} to {self._end_date}")
+        print(f"Duration: {self._duration}")
+        print(f"Start time: {self._start_time}")
 
 class TransientTask(Task):
     def __init__(self, name: str, duration: float, startTime: float,
@@ -72,7 +75,10 @@ class TransientTask(Task):
         return self._date
 
     def displayTask(self) -> None:
-        pass
+        print(f"{self._name}: {self._type}")
+        print(f"Date: {self._date}")
+        print(f"Duration: {self._duration}")
+        print(f"Start time: {self._start_time}")
     
 class AntiTask(Task):
     def __init__(self, name: str, duration: float, startTime: float,
@@ -89,7 +95,10 @@ class AntiTask(Task):
         return "Cancellation"
 
     def displayTask(self) -> None:
-        pass
+        print(f"{self._name}: Cancellation")
+        print(f"Date: {self._date}")
+        print(f"Duration: {self._duration}")
+        print(f"Start time: {self._start_time}")
     
 class TaskEncoder(JSONEncoder):
     def default(self, o):
