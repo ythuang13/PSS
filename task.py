@@ -52,6 +52,7 @@ class RecurringTask(Task):
         return self._frequency
 
     def displayTask(self) -> None:
+        # todo format, date, duration, time, etc
         print(f"{self._name}: {self._type}, {'daily' if self._frequency == 1 else 'weekly'}")
         print(f"Date: {self._start_date} to {self._end_date}")
         print(f"Duration: {self._duration}")
@@ -75,6 +76,7 @@ class TransientTask(Task):
         return self._date
 
     def displayTask(self) -> None:
+        # todo format, date, duration, time, etc
         print(f"{self._name}: {self._type}")
         print(f"Date: {self._date}")
         print(f"Duration: {self._duration}")
@@ -95,6 +97,7 @@ class AntiTask(Task):
         return "Cancellation"
 
     def displayTask(self) -> None:
+        # todo format, date, duration, time, etc
         print(f"{self._name}: Cancellation")
         print(f"Date: {self._date}")
         print(f"Duration: {self._duration}")
