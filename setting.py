@@ -19,8 +19,7 @@ SCHEDULE_MENU = """1. write schedule to file
 CREATE_TASK_MENU = """1. Create Recurring task
 2. Create Transient task
 3. Create Anti-task
-4. Back to Manage Task
-"""
+4. Back to Manage Task menu"""
 
 # constants
 RECURRING_TASKS = [
