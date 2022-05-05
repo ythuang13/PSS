@@ -1,31 +1,26 @@
 import os
 
 # menus
-MAIN_MENU = """
-1. Manage task
+MAIN_MENU = """1. Manage task
 2. Manage schedule
 3. Quit"""
 
-TASKS_MENU = """
-1. Create task
+TASKS_MENU = """1. Create task
 2. Find task
 3. Delete task
 4. Edit task
 5. Back to main menu"""
 
-SCHEDULE_MENU = """
-1. write schedule to file
+SCHEDULE_MENU = """1. write schedule to file
 2. read schedule from file
 3. view schedule
 4. Back to main menu"""
 
-CREATE_TASK_MENU = """
-1. Create Recurring task
+CREATE_TASK_MENU = """1. Create Recurring task
 2. Create Transient task
 3. Create Anti-task
 4. Back to Manage Task
 """
-
 
 # constants
 RECURRING_TASKS = [
@@ -59,7 +54,7 @@ def printHeader(title: str) -> None:
         os.system(command)
 
     clearConsole()
-    print("\n" + "=" * 30)
+    print("=" * 30)
     print("{:^30}".format(title))
     print("=" * 30 + "\n")
 
