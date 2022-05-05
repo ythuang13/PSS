@@ -46,8 +46,8 @@ class PSS:
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
-                        print(task, end="")
-                        input("")
+                        print(task)
+                        input("Press enter to exit")
                         running = False
                         break
                 else:
@@ -67,8 +67,8 @@ class PSS:
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
-                        print(task, end="")
-                        input("")
+                        print(task)
+                        input("Press enter to exit")
                         # todo delete here, but need to check for conflict
                         running = False
                         break
@@ -90,8 +90,8 @@ class PSS:
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
-                        print(task, end="")
-                        input("")
+                        print(task)
+                        input("Press enter to exit")
                         # todo edit here, check conflict still
                         running = False
                         break
