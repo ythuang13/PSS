@@ -37,7 +37,9 @@ class PSS:
     def findTask(self) -> None:
         """User search task by name.
         If found, display the task else display not found"""
-        pass
+        name_input = input("Enter name of the task to find: ")
+        while self.nameVerification(name_input):
+            pass
 
     def deleteTask(self) -> None:
         """User select task to delete using task name.
