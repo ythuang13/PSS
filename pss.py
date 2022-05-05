@@ -37,20 +37,24 @@ class PSS:
     def findTask(self) -> None:
         """User search task by name.
         If found, display the task else display not found"""
-        name_input = input("Enter name of the task to find (empty to exit): ")
-        if name_input == "":
-            return
-        else:
-            for task in self._tasksList:
-                if task.getName() == name_input:
-                    print(task)
+        running = True
+        while running:
+            name_input = input("Enter name of the task to find (empty to exit): ")
+            if name_input == "":
+                return
+            else:
+                for task in self._tasksList:
+                    if task.getName() == name_input:
+                        print(task)
+                else:
+                    print("No task found")
         
 
     def deleteTask(self) -> None:
         """User select task to delete using task name.
         If found, validate if delete anti-task would create conflict,
         also delete recurring task and its anti-task together"""
-        pass
+        
 
     def editTask(self) -> None:
         """User select task to edit using task name.
