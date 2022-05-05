@@ -37,9 +37,14 @@ class PSS:
     def findTask(self) -> None:
         """User search task by name.
         If found, display the task else display not found"""
-        name_input = input("Enter name of the task to find: ")
-        while self.nameVerification(name_input):
-            pass
+        name_input = input("Enter name of the task to find (empty to exit): ")
+        if name_input == "":
+            return
+        else:
+            for task in self._tasksList:
+                if task.getName() == name_input:
+                    print(task)
+        
 
     def deleteTask(self) -> None:
         """User select task to delete using task name.
@@ -274,7 +279,7 @@ class PSS:
         """Return True if name is uniqe, else False"""
         if task_name == "":
             return False
-            
+
         for task in self._tasksList:
             name = task.getName()
             if task_name == name:
