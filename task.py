@@ -1,7 +1,7 @@
 from setting import ANTI_TASKS, FREQUENCIES, RECURRING_TASKS, TRANSIENT_TASKS
+from json import JSONEncoder
 
-
-class Task:
+class Task():
     def __init__(self, name: str, duration: float, startTime: float):
         self._name = name
         self._duration = duration
@@ -89,3 +89,6 @@ class AntiTask(Task):
     def displayTask(self) -> None:
         pass
     
+class TaskEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
