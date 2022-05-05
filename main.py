@@ -43,15 +43,19 @@ def manageTask(pss: PSS) -> None:
         option = input("Enter option: ")
         if option == "1":
             # create task
+            printHeader("Create Task")
             pss.createTask()
         elif option == "2":
             # find task
+            printHeader("Find Task")
             pss.findTask()
         elif option == "3":
             # delete task
+            printHeader("Delete Task")
             pss.deleteTask()
         elif option == "4":
             # edit task
+            printHeader("Edit Task")
             pss.editTask()
         elif option == "5":
             # back to main menu
@@ -67,12 +71,15 @@ def manageSchedule(pss: PSS) -> None:
         option = input("Enter option: ")
         if option == "1":
             # write schedule to file
+            printHeader("Write Schedule")
             pss.writeToFile()
         elif option == "2":
             # read schedule from file
+            printHeader("Read Schedule")
             pss.readFromFile()
         elif option == "3":
             # view schedule
+            printHeader("View Schedule")
             pss.viewSchedule()
         elif option == "4":
             # back to main menu
