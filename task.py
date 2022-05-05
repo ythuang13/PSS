@@ -91,4 +91,26 @@ class AntiTask(Task):
     
 class TaskEncoder(JSONEncoder):
     def default(self, o):
-        return o.__dict__
+        result = {}
+        if isinstance(o, RecurringTask):
+            result["Name"] = o.getName()
+            result["Type"] = o.getType()
+            result["StartDate"] = o.getStartDate()
+            result["StartTime"] = o.getStartTime()
+            result["Duration"] = o.getDuration()
+            result["EndDate"] = o.getEndDate()
+            result["Frequency"] = o.getFrequency()
+        elif isinstance(o, TransientTask):
+            result["Name"] = o.getName()
+            result["Type"] = o.getType()
+            result["Date"] = o.getDate()
+            result["StartTime"] = o.getStartTime()
+            result["Duration"] = o.getDuration()
+        elif isinstance(o, AntiTask):
+            result["Name"] = o.getName()
+            result["Type"] = o.getType()
+            result["Date"] = o.getDate()
+            result["StartTime"] = o.getStartTime()
+            result["Duration"] = o.getDuration()
+
+        return result
