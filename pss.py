@@ -14,7 +14,25 @@ class PSS:
         """User select type of task, pss verify data including,
         name, date, time and duration before create the task
         and store in tasksList"""
-        pass
+        running = True
+        while running:
+            printHeader("Create Task")
+            print(CREATE_TASK_MENU)
+            option = input("Enter task type: ")
+            if option == "1":
+                # recurring task
+                pass
+            elif option == "2":
+                # transient task
+                pass
+            elif option == "3":
+                # anti-task
+                pass
+            elif option == "4":
+                running = False
+            else:
+                print("Invalid option")
+                continue
 
     def findTask(self) -> None:
         """User search task by name.
