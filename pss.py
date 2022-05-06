@@ -1,4 +1,8 @@
 import json
+import datetime
+from datetime import date
+import calendar
+import string;
 from task import RecurringTask, TransientTask, AntiTask, TaskEncoder
 from setting import *
 
@@ -398,3 +402,17 @@ class PSS:
     def displaySchedule() -> None:
         """Display the schedule, used for view schedule"""
         pass
+
+    def dateClassification(self, date: int) -> string:
+        """ Get the date from the input and return
+        the day of the week that it is in so we can classify
+        them according to the day
+        @param type: recurring, transient or anti
+        """
+        day = int(date % 100)
+        month = int((date // 100) % 100)
+        year = date // 10000
+
+        #Change it to the format of the library
+        reformatedDate = datetime.date(year, month, day)
+        return reformatedDate.strftime("%A")
