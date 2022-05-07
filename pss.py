@@ -108,20 +108,64 @@ class PSS:
         """
         if default:
             file_path = self._defaultFilePath
+
+            # file verification
+            if not self.fileVerification(file_path):
+                open(file_path, 'w').close()
+
+            # dumps json to file
+            with open(file_path, "w") as file:
+                file.write(json.dumps(self._tasksList, indent=4, cls=TaskEncoder))
         else:
-            file_path = input("Enter file path: ")
+            print(DAY_WEEK_MONTH_MENU)
+            duration_input = input("Enter options number: ")
+            if duration_input == "1":
+                duration = "day"
+            elif duration_input == "2":
+                duration = "week"
+            elif duration_input == "3":
+                duration = "month"
+            else:
+                return
+            file_path = input("Enter a file path: ")
 
-        # file verification
-        if not self.fileVerification(file_path):
-            return False
-        
-        # todo, user specify day
+            start_date = None
+            while not self.dateVerification(start_date):
+                start_date_input = input("Enter a start date in YYYYMMDD format (empty to exit): ")
+                try:
+                    start_date = int(start_date_input)
+                except ValueError:
+                    print("Invalid date format")
+                    return
+                if start_date_input == "":
+                    return
+                
+            
+            # processing and sorting tasks to write to file
+            result_task_list = []
+            antitasks_list = []
 
-        # dumps json to file
-        with open(file_path, "w") as file:
-            file.write(json.dumps(self._tasksList, indent=4, cls=TaskEncoder))
+            # time range
+            start_date = start_date_input
+            end_date = None
+            if duration == "day":
+                end_date = start_date
+            elif duration == "week":
+                end_date = start_date + 7
+            elif duration == "month":
+                end_date = start_date + 30
+            
 
-        return True
+            # remove recurring task that's cancel out with anti-task
+            for task in self._tasksList:
+                if isinstance(task, AntiTask):
+                    antitasks_list.append(task)
+
+            # sorting
+
+            # dumps processed tasks to file
+            with open(file_path, "w") as file:
+                file.write(json.dumps(result_task_list, indent=4, cls=TaskEncoder))
 
     def readFromFile(self, default=False) -> bool:
         """Default is to read from default file path.
