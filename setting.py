@@ -21,6 +21,11 @@ CREATE_TASK_MENU = """1. Create Recurring task
 3. Create Anti-task
 4. Back to Manage Task menu"""
 
+DAY_WEEK_MONTH_MENU = """1. Day
+2. Week
+3. Month
+4. Back to Manage Schedule Menu"""
+
 # constants
 RECURRING_TASKS = [
     "Class",
