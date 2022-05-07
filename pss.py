@@ -199,7 +199,7 @@ class PSS:
         recurring that's cancel out with anti-task
         """
         for task in self._tasksList:
-            print(task.dateClassification(20220506))
+            task.displayTask()
         input()
 
     def fileVerification(self, file_path: str) -> bool:
@@ -363,7 +363,7 @@ class PSS:
                             return False
           
         #Comparing TransientTasks against other tasks
-        if isinstance(task, TransientTask):
+        elif isinstance(task, TransientTask):
             for other_task in self._tasksList:
                 #Check if Transient task overlaps with recurring task
                 if isinstance(other_task, RecurringTask):
