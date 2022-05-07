@@ -1,5 +1,8 @@
-from setting import ANTI_TASKS, FREQUENCIES, RECURRING_TASKS, TRANSIENT_TASKS
+from setting import *
 from json import JSONEncoder
+import datetime
+from datetime import date
+
 
 class Task():
     def __init__(self, name: str, duration: float, startTime: float):
@@ -21,6 +24,32 @@ class Task():
 
     def displayTask(self) -> None:
         pass
+
+    def dateClassification(self, date: int) -> str:
+        """ Get the date from the input and return
+        the day of the week that it is in so we can classify
+        them according to the day
+        @param type: recurring, transient or anti
+        """
+        day = int(date % 100)
+        month = int((date // 100) % 100)
+        year = date // 10000
+
+        #Change it to the format of the library
+        reformatedDate = datetime.date(year, month, day)
+        return reformatedDate.strftime("%A")
+
+    def getPythonFormatedDate(self, date: int) -> str:
+        '''Get the date in Python notation so we can
+        compare the dates
+        @param type: recurring, transient or anti
+        '''
+        day = int(date % 100)
+        month = int((date // 100) % 100)
+        year = date // 10000
+
+        reformatedDate = datetime.date(year, month, day)
+        return reformatedDate
 
 class RecurringTask(Task):
     def __init__(self, name: str, duration: float, startTime: float,
