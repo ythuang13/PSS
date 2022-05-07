@@ -321,7 +321,7 @@ class PSS:
                     other_date = other_task.getPythonFormatedDate(other_task.getDate())
 
                     #check if they could occur on the same day
-                    if((task.dateClassification(task_start_date) == 
+                    if((task.dateClassification(task.getStartDate()) == 
                         other_task.dateClassification(other_task.getDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a TransientTask in those dates
                         (task.getFrequency() == 7 and (task_start_date <= other_date and task_end_date >= other_date))):
