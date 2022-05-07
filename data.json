@@ -14,5 +14,12 @@
         "Duration": 0.75,
         "EndDate": 20200715,
         "Frequency": 7
+    },
+    {
+        "Name": "No walk",
+        "Type": "Cancellation",
+        "Date": 20200422,
+        "StartTime": 10.25,
+        "Duration": 0.75
     }
 ]
