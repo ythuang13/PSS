@@ -9,7 +9,7 @@
     {
         "Name": "Take a walk",
         "Type": "Exercise",
-        "StartDate": 20200415,
+        "StartDate": 20200416,
         "StartTime": 10.25,
         "Duration": 0.75,
         "EndDate": 20200715,
@@ -18,7 +18,7 @@
     {
         "Name": "No walk",
         "Type": "Cancellation",
-        "Date": 20200422,
+        "Date": 20200423,
         "StartTime": 10.25,
         "Duration": 0.75
     }
