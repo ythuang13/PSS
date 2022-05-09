@@ -288,7 +288,103 @@ class PSS:
         PSS sort and display all of the tasks, except for 
         recurring that's cancel out with anti-task
         """
-        pass
+        printHeader("View Schedule")
+        print(DAY_WEEK_MONTH_MENU)
+        duration_input = input("Enter options number: ")
+        if duration_input == "1":
+            duration = "day"
+        elif duration_input == "2":
+            duration = "week"
+        elif duration_input == "3":
+            duration = "month"
+        else:
+            return
+
+        start_date = None
+        while not self.dateVerification(start_date):
+            start_date_input = input("Enter a start date in YYYYMMDD format (all for all, empty to exit): ")
+            try:
+                start_date = int(start_date_input)
+            except ValueError:
+                print("Invalid date format")
+                return
+            if start_date_input == "":
+                return
+                
+            
+        # processing and sorting tasks to write to file
+        result_task_list = []
+        antitasks_list = []
+
+        # time range
+        start_year = start_date // 10000
+        start_month = (start_date // 100) % 100
+        start_day = start_date % 100
+        end_year = start_year
+        end_month = start_month
+        end_day = start_day
+        if duration == "week":
+            end_day = start_day + 7
+            if end_month in [1, 3, 5, 7, 8, 10, 12]:
+                if end_day > 31:
+                    end_day = end_day - 31
+                    end_month += 1
+            elif end_month in [4, 6, 9, 11]:
+                if end_day > 30:
+                    end_day = end_day - 30
+                    end_month += 1
+            elif end_month == 2:
+                if start_year % 4 == 0:
+                    if end_day > 29:
+                        end_day = end_day - 29
+                        end_month += 1
+                else:
+                    if end_day > 28:
+                        end_day = end_day - 28
+                        end_month += 1
+            if end_month > 12:
+                end_month = end_month - 12
+                end_year += 1
+            
+        elif duration == "month":
+            end_month += 1
+            if end_month > 12:
+                end_month = end_month - 12
+                end_year += 1            
+        
+
+        # remove recurring task that's cancel out with anti-task
+        for task in self._tasksList:
+            if isinstance(task, AntiTask):
+                antitasks_list.append(task)
+        
+        for task in self._tasksList:
+            if isinstance(task, RecurringTask):
+                if task.getFrequency() == 1:
+                    # daily
+                    counter = 1
+                    for day in range(start_date, end_year * 10000 + end_month * 100 + end_day):
+                        if self.dateVerification(day):
+                            result_task_list.append(RecurringTask(task.getName() + str(counter),
+                                task.getDuration(), task.getStartTime(), task.getType(),
+                                day, day, 1))
+                        counter += 1
+                else:
+                    # weekly
+                    counter = 1
+                    for day in range(start_date, end_year * 10000 + end_month * 100 + end_day, 7):
+                        if self.dateVerification(day):
+                            result_task_list.append(RecurringTask(task.getName() + str(counter),
+                                task.getDuration(), task.getStartTime(), task.getType(),
+                                day, day, 1))
+                        counter += 1
+            elif isinstance(task, TransientTask):
+                result_task_list.append(task)
+        
+        for task in result_task_list:
+            task.displayTask()
+            print()
+        input("Press enter to go continue...")
 
     def fileVerification(self, file_path: str) -> bool:
         """Check if the file is exists or not"""
