@@ -32,7 +32,7 @@ class PSS:
 
                 taskName = input("Enter the Task Name: ")
                 print(TRANSIENT_TASKS)
-                taskType = input("Enter the type of Transient Task: ")
+                taskType = input("Enter the type of Transient Task: ").capitalize()
                 taskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
                 taskTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
                 taskDuration= float(input("Enter the Duration Time of the Task (0 - 23.75): "))
@@ -54,13 +54,20 @@ class PSS:
                 while self.durationVerification(taskDuration) == False:
                     taskDuration = float(input("Invalid duration, enter the Duration Time of the Task (0 - 23.75): "))
                 
-                if self.taskVerification(newTransientTask) == False:
-                    print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
-                    time.sleep(5)
+                newTransientTask = TransientTask(taskName, taskDuration, taskTime, taskType, taskDate)
+
+                newTransientTask.displayTask()
+
+                if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
+                    if self.taskVerification(newTransientTask) == False:
+                        print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
+                        time.sleep(3)
+                    else:
+                        self._tasksList.append(newTransientTask)
+                        print("Task added to the schedule!")
+                        time.sleep(3)
                 else:
-                    self._tasksList.append(newTransientTask)
-                    print("Task added to the schedule!")
-                    time.sleep(5)
+                    print("Task was not created.")
                 # pass
             elif option == "3":
                 # anti-task
