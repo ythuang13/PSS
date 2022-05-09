@@ -3,6 +3,7 @@ import datetime
 from datetime import date
 import calendar
 import string;
+import time
 from task import RecurringTask, TransientTask, AntiTask, TaskEncoder
 from setting import *
 
@@ -28,7 +29,39 @@ class PSS:
                 pass
             elif option == "2":
                 # transient task
-                pass
+
+                taskName = input("Enter the Task Name: ")
+                print(TRANSIENT_TASKS)
+                taskType = input("Enter the type of Transient Task: ")
+                taskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
+                taskTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                taskDuration= float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+
+                newTransientTask = TransientTask(taskName, taskDuration, taskTime, taskType, taskDate)
+
+                while self.nameVerification(taskName) == False:
+                    taskName = input("Invalid name, enter new Task Name: ")
+            
+                while self.typeVerification(newTransientTask, taskType) == False:
+                    taskType = input("Invalid type, enter type of Transient Task: ")
+
+                while self.dateVerification(taskDate) == False:
+                    taskDate = int(input("Invalid date, enter the Date of the Task (YYYYMMDD): "))
+
+                while self.timeVerification(taskTime) == False:
+                    taskTime = float(input("Invalid time, nter the Start Time of the Task (0 - 23.75): "))
+
+                while self.durationVerification(taskDuration) == False:
+                    taskDuration = float(input("Invalid duration, enter the Duration Time of the Task (0 - 23.75): "))
+                
+                if self.taskVerification(newTransientTask) == False:
+                    print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
+                    time.sleep(5)
+                else:
+                    self._tasksList.append(newTransientTask)
+                    print("Task added to the schedule!")
+                    time.sleep(5)
+                # pass
             elif option == "3":
                 # anti-task
                 pass
@@ -519,7 +552,7 @@ class PSS:
         return True
 
     def nameVerification(self, task_name: str) -> bool:
-        """Return True if name is uniqe, else False"""
+        """Return True if name is unique, else False"""
         if task_name == "":
             return False
 
