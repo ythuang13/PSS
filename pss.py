@@ -1,4 +1,9 @@
 import json
+import datetime
+from datetime import date
+import calendar
+import string;
+import time
 from task import RecurringTask, TransientTask, AntiTask, TaskEncoder
 from setting import *
 
@@ -24,7 +29,46 @@ class PSS:
                 pass
             elif option == "2":
                 # transient task
-                pass
+
+                taskName = input("Enter the Task Name: ")
+                print(TRANSIENT_TASKS)
+                taskType = input("Enter the type of Transient Task: ").capitalize()
+                taskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
+                taskTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                taskDuration= float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+
+                newTransientTask = TransientTask(taskName, taskDuration, taskTime, taskType, taskDate)
+
+                while self.nameVerification(taskName) == False:
+                    taskName = input("Invalid name, enter new Task Name: ")
+            
+                while self.typeVerification(newTransientTask, taskType) == False:
+                    taskType = input("Invalid type, enter type of Transient Task: ")
+
+                while self.dateVerification(taskDate) == False:
+                    taskDate = int(input("Invalid date, enter the Date of the Task (YYYYMMDD): "))
+
+                while self.timeVerification(taskTime) == False:
+                    taskTime = float(input("Invalid time, nter the Start Time of the Task (0 - 23.75): "))
+
+                while self.durationVerification(taskDuration) == False:
+                    taskDuration = float(input("Invalid duration, enter the Duration Time of the Task (0 - 23.75): "))
+                
+                newTransientTask = TransientTask(taskName, taskDuration, taskTime, taskType, taskDate)
+
+                newTransientTask.displayTask()
+
+                if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
+                    if self.taskVerification(newTransientTask) == False:
+                        print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
+                        time.sleep(3)
+                    else:
+                        self._tasksList.append(newTransientTask)
+                        print("Task added to the schedule!")
+                        time.sleep(3)
+                else:
+                    print("Task was not created.")
+                # pass
             elif option == "3":
                 # anti-task
                 pass
@@ -457,40 +501,237 @@ class PSS:
         return True
     
     def overlapVerification(self, task: RecurringTask or TransientTask or AntiTask) -> bool:
-        """Check if the task is overlap with other task or not"""
-        if isinstance(task, RecurringTask):
-            for other_task in self._tasksList:
-                pass
+        """Pass in a task to check if it overlap with any other task in the schedule"""
 
-        elif isinstance(task, TransientTask):
+        #comparing RecurringTasks against other tasks
+        if isinstance(task, RecurringTask):
+            #run through all other tasks
             for other_task in self._tasksList:
+                #check if there is overlap between two recurring tasks
                 if isinstance(other_task, RecurringTask):
-                    pass
+
+                    #get the start and end date of recurring tasks
+                    task_start_date = task.getPythonFormatedDate(task.getStartDate())
+                    task_end_date = task.getPythonFormatedDate(task.getEndDate())
+                    other_start_date = other_task.getPythonFormatedDate(other_task.getEndDate())
+                    other_end_date = other_task.getPythonFormatedDate(other_task.getEndDate())
+
+                    #check if dates are overlapping 
+                    if (not((task_start_date < other_start_date and task_end_date < other_start_date)or
+                        (task_start_date > other_end_date and task_end_date > other_end_date))):
+
+
+                       #three cases where times can overlap on same day
+                       if(((task.getFrequency() == 1 and other_task.getFrequency() == 1) and
+                          (task.dateClassification(task.getStartDate()) == 
+                           other_task.dateClassification(other_task.getStartDate()))) or #case 1: same frequency and same day of week
+                          (task.getFrequency() == 1 and other_task.getFrequency() == 7) or #case 2: frequency 1 and frequency 7
+                          (task.getFrequency() == 7 and other_task.getFrequency() == 1)):  #case 3: frequecny 7 and frequency 1
+
+                            #get start and end times of both tasks
+                            task_start_time = task.getStartTime()
+                            task_end_time = task_start_time + task.getDuration()
+                            other_start_time = other_task.getStartTime()
+                            other_end_time = other_start_time + other_task.getDuration()
+                            
+                            #check if the times of the class overlap
+                            if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                                (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                                return False
+
+
+                #checking if a recurring task overlaps a transient task 
                 elif isinstance(other_task, TransientTask):
-                    if task.getDate() == other_task.getDate():
-                        other_start_time = other_task.getStartTime()
-                        other_end_time = other_start_time + other_task.getDuration()
+
+                    #get the start and end date of recurring tasks
+                    task_start_date = task.getPythonFormatedDate(task.getStartDate())
+                    task_end_date = task.getPythonFormatedDate(task.getEndDate())
+                    other_date = other_task.getPythonFormatedDate(other_task.getDate())
+
+                    #check if they could occur on the same day
+                    if((task.dateClassification(task.getStartDate()) == 
+                        other_task.dateClassification(other_task.getDate())) or
+                        #can also occur on same day if there is RecurringTask everyday with a TransientTask in those dates
+                        (task.getFrequency() == 7 and (task_start_date <= other_date and task_end_date >= other_date))):
+
+                        #get start and end times of both tasks
                         task_start_time = task.getStartTime()
                         task_end_time = task_start_time + task.getDuration()
-                        if task_start_time < other_start_time and task_end_time > other_start_time:
-                            return False    
-                        elif task_start_time > other_start_time and task_end_time <= other_end_time:
+                        other_start_time = other_task.getStartTime()
+                        other_end_time = other_start_time + other_task.getDuration()
+                        
+                        #check if the times of the class overlap
+                        if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                            (task_start_time >= other_end_time and task_end_time > other_end_time))):
                             return False
+                
+                #checking if a recurring task overlaps a transient task 
                 elif isinstance(other_task, AntiTask):
-                    pass
-        elif isinstance(task, AntiTask):
-            # check for matchup with an instance of recurring task
-            # only one anti-task can for one instance of recurring task
+
+                    #get the start and end date of recurring tasks
+                    task_start_date = task.getPythonFormatedDate(task.getStartDate())
+                    task_end_date = task.getPythonFormatedDate(task.getEndDate())
+                    other_date = other_task.getPythonFormatedDate(other_task.getDate())
+
+                    #check if they could occur on the same day
+                    if((task.dateClassification(task_start_date) == 
+                        other_task.dateClassification(other_task.getDate())) or
+                        #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
+                        (task.getFrequency() == 7 and (task_start_date <= other_date and task_end_date >= other_date))):
+
+                        #get start and end times of both tasks
+                        task_start_time = task.getStartTime()
+                        task_end_time = task_start_time + task.getDuration()
+                        other_start_time = other_task.getStartTime()
+                        other_end_time = other_start_time + other_task.getDuration()
+                        
+                        #check if the times of the class overlap
+                        if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                            (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                            return False
+          
+        #Comparing TransientTasks against other tasks
+        elif isinstance(task, TransientTask):
             for other_task in self._tasksList:
+                #Check if Transient task overlaps with recurring task
                 if isinstance(other_task, RecurringTask):
-                    pass
+
+                    #get the start and end date of recurring tasks
+                    task_date = task.getPythonFormatedDate(task.getDate())
+                    other_task_start_date = other_task.getPythonFormatedDate(other_task.getStartDate())
+                    other_task_end_date = other_task.getPythonFormatedDate(other_task.getEndDate())
+
+                    #check if they could occur on the same day
+                    if((task.dateClassification(task.getDate) == 
+                        other_task.dateClassification(other_task.getStartDate())) or
+                        #can also occur on same day if there is Transient task in the time fram of a Recurring task everyday
+                        (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
+
+                        #check if there is an anti-task recurring task and transient at the same time
+                        for anti_task in self._tasksList:
+                            if isinstance(anti_task, AntiTask): 
+
+                                #if there all three tasks exist at the same time
+                                all_three_check = False
+                                #get the date of the anti-task
+                                anti_task_date = task.getPythonFormatedDate(task.getDate())
+
+                                if((other_task.dateClassification(task_start_date) == 
+                                    anti_task.dateClassification(anti_task.getDate())) or
+                                    #can also occur on same day if there is RecurringTask everyday with an AntiTask in those dates
+                                    (other_task.getFrequency() == 7 and (task_start_date <= anti_task_date and task_end_date >= anti_task_date))):
+
+                                    #get start and end times of both tasks
+                                    anti_task_start_time = anti_task.getStartTime()
+                                    anti_task_end_time = task_start_time + anti_task.getDuration()
+                                    other_start_time = other_task.getStartTime()
+                                    other_end_time = other_start_time + other_task.getDuration()       
+
+                                    #if it matches the start and end time of recurring task it is valid so we don't compare it to
+                                    #a recurring task
+                                    if(((anti_task_start_time == other_start_time) and
+                                        (anti_task_end_time == other_end_time))):
+                                        all_three_check = True
+                                        break
+                    
+                    #if a Transient Task, Anti Task and Recurring Task happen at the same time skip the check
+                    if(all_three_check):
+                        continue
+
+                    #get start and end times of both tasks
+                    task_start_time = task.getStartTime()
+                    task_end_time = task_start_time + task.getDuration()
+                    other_start_time = other_task.getStartTime()
+                    other_end_time = other_start_time + other_task.getDuration()
+                    
+                    #check if the times of the class overlap
+                    if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                        (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                        return False
+
+                #check TransientTask against TransientTask      
                 elif isinstance(other_task, TransientTask):
-                    pass
+                    #check if they have the same date
+                    if (task.getDate() == other_task.getDate()):
+                        #get start and end times of both tasks
+                        task_start_time = task.getStartTime()
+                        task_end_time = task_start_time + task.getDuration()
+                        other_start_time = other_task.getStartTime()
+                        other_end_time = other_start_time + other_task.getDuration()
+                        
+                        #check if the times of the class overlap
+                        if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                            (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                            return False
+
+                #we dont need to check if it occurs at the same time as an AntiTask because this is allowed
+                '''
                 elif isinstance(other_task, AntiTask):
                     pass
+                '''
+
+        #Comparing AntiTask agaisnt other tasks 
+        elif isinstance(task, AntiTask):
+            for other_task in self._tasksList:
+
+                #Check AntiTask against RecurringTask
+                if isinstance(other_task, RecurringTask):
+                    #get the start and end date of recurring tasks
+                    task_date = task.getPythonFormatedDate(task.getDate())
+                    other_start_date = other_task.getPythonFormatedDate(other_task.getStartDate())
+                    other_end_date = other_task.getPythonFormatedDate(other_task.getEndDate())
+
+                    #check if they could occur on the same day
+                    if((task.dateClassification(task_date) == 
+                        other_task.dateClassification(other_task.getStartDate())) or
+                        #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
+                        (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
+
+                        #get start and end times of both tasks
+                        task_start_time = task.getStartTime()
+                        task_end_time = task_start_time + task.getDuration()
+                        other_start_time = other_task.getStartTime()
+                        other_end_time = other_start_time + other_task.getDuration()
+                        
+                        #check if the times of the class overlap
+                        if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                            (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                            return False
+
+                #check AntiTask against TransientTask
+                elif isinstance(other_task, TransientTask):
+                    #check if they have the same date
+                    if (task.getDate() == other_task.getDate()):
+                        #get start and end times of both tasks
+                        task_start_time = task.getStartTime()
+                        task_end_time = task_start_time + task.getDuration()
+                        other_start_time = other_task.getStartTime()
+                        other_end_time = other_start_time + other_task.getDuration()
+                        
+                        #check if the times of the class overlap
+                        if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                            (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                            return False
+
+                #check AntiTask against AntiTask            
+                elif isinstance(other_task, AntiTask):
+                    #check if they have the same date
+                    if (task.getDate() == other_task.getDate()):
+                        #get start and end times of both tasks
+                        task_start_time = task.getStartTime()
+                        task_end_time = task_start_time + task.getDuration()
+                        other_start_time = other_task.getStartTime()
+                        other_end_time = other_start_time + other_task.getDuration()
+                        
+                        #check if the times of the class overlap
+                        if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
+                            (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                            return False
+        #If it is not one of these three classes return False
         else:
             return False
 
+        #return true if it does not fail any of these tests
         return True
 
     def timeVerification(self, time: float) -> bool:
@@ -506,7 +747,7 @@ class PSS:
         return True
 
     def nameVerification(self, task_name: str) -> bool:
-        """Return True if name is uniqe, else False"""
+        """Return True if name is unique, else False"""
         if task_name == "":
             return False
 
@@ -560,6 +801,10 @@ class PSS:
         month = int((date // 100) % 100)
         year = date // 10000
         
+
+        if year % 4 == 0:
+            if day not in range(1, 30):
+                return False
         # year check
         # if we need to check year
 
