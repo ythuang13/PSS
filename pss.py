@@ -574,7 +574,7 @@ class PSS:
                     other_date = other_task.getPythonFormatedDate(other_task.getDate())
 
                     #check if they could occur on the same day
-                    if((task.dateClassification(task_start_date) == 
+                    if((task.dateClassification(task.getStartDate()) == 
                         other_task.dateClassification(other_task.getDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
                         (task.getFrequency() == 7 and (task_start_date <= other_date and task_end_date >= other_date))):
@@ -602,7 +602,7 @@ class PSS:
                     other_task_end_date = other_task.getPythonFormatedDate(other_task.getEndDate())
 
                     #check if they could occur on the same day
-                    if((task.dateClassification(task.getDate) == 
+                    if((task.dateClassification(task.getDate()) == 
                         other_task.dateClassification(other_task.getStartDate())) or
                         #can also occur on same day if there is Transient task in the time fram of a Recurring task everyday
                         (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
@@ -682,7 +682,7 @@ class PSS:
                     other_end_date = other_task.getPythonFormatedDate(other_task.getEndDate())
 
                     #check if they could occur on the same day
-                    if((task.dateClassification(task_date) == 
+                    if((task.dateClassification(task.getDate()) == 
                         other_task.dateClassification(other_task.getStartDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
                         (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
