@@ -57,11 +57,10 @@ class PSS:
                 if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
                     if not self.taskVerification(newRecurringTask):
                         print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
-                        input("Press enter to exit...")
                     else:
                         self._tasksList.append(newRecurringTask)
                         print("Task added to the schedule!")
-                        input("Press enter to exit...")
+                    input("Press enter to exit...")
                 else:
                     print("Task was not created.")
 
@@ -103,20 +102,45 @@ class PSS:
                 if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
                     if self.taskVerification(newTransientTask) == False:
                         print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
-                        input("Press enter to exit...")
                     else:
                         self._tasksList.append(newTransientTask)
                         print("Task added to the schedule!")
-                        input("Press enter to exit...")
+                    input("Press enter to exit...")
                 else:
                     print("Task was not created.")
             elif option == "3":
                 # anti-task
                 printHeader("Create Anti Task")
+
+                taskName = taskDate = taskStartTime = taskDuration = None
+                try:
+                    while not self.nameVerification(taskName):
+                        taskName = input("Enter the Task Name: ")
+                    while not self.dateVerification(taskDate):
+                        taskDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                    while not self.timeVerification(taskStartTime):
+                        taskStartTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                    while not self.durationVerification(taskDuration):
+                        taskDuration = float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+                except ValueError:
+                    continue
+
+                newAntiTask = AntiTask(taskName, taskDuration, taskStartTime, taskDate)
+                newAntiTask.displayTask()
+
+                if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
+                    if not self.taskVerification(newAntiTask):
+                        print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
+                    else:
+                        self._tasksList.append(newAntiTask)
+                        print("Task added to the schedule!")
+                    input("Press enter to exit...")
+                else:
+                    print("Task was not created.")
             elif option == "4":
                 running = False
             else:
-                print("Invalid option")
+                print("Invalid option")    
                 continue
 
     def findTask(self) -> None:
