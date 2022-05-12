@@ -112,10 +112,26 @@ class PSS:
                 for task in self._tasksList:
                     if task.getName() == name_input:
                         print(task)
+                        for type in TRANSIENT_TASKS:
+                            if task.getType() == type:
+                                if input("Type 'Y' to confirmed delete:") == 'Y':
+                                    self._tasksList.remove(task)
+                                break
+                        
+                        for type in RECURRING_TASKS:
+                            if task.getType() == type:
+                                #stuff stuff stuff
+                        
+                        if task.getType() == ANTI_TASKS[0]:
+                            #stuff stuff
+
+                        running = False
                         input("Press enter to exit")
                         # todo delete here, but need to check for conflict
-                        running = False
-                        break
+                        
+                            
+
+
                 else:
                     print(f"No task with name: {name_input} is found.")
         
