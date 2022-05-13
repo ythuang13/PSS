@@ -47,6 +47,9 @@ ANTI_TASKS = ["Cancellation"]
 
 FREQUENCIES = [1, 7]
 
+# errors
+CONFLICT_ERROR = "Error. Deleting this task would create a conflict. This task will not be deleted."
+
 # special functions
 def printHeader(title: str) -> None:
     '''print header with title'''

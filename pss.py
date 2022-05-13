@@ -107,30 +107,37 @@ class PSS:
             printHeader("Delete Task")
             name_input = input("Enter the name of the task to delete (empty to exit): ")
             if name_input == "":
-                return 
+                return
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
                         print(task)
-                        for type in TRANSIENT_TASKS:
-                            if task.getType() == type:
+                        if isinstance(task, TransientTask):
+                            if input("Type 'Y' to confirmed delete:") == 'Y':
+                                self._tasksList.remove(task)
+                        elif isinstance(task, RecurringTask):
+                            if input("An anti task associated with task will also be deleted.\nType 'Y' to confirmed delete:") == 'Y':
+                                temp = RecurringTask(task)  #We make a copy of task to temp
+                                self._tasksList.remove(task)  # we remove that task in our list
+                                for anti_task in self._tasksList and isinstance(anti_task, AntiTask):   #We check if there's an anti task associated with this task
+                                    if (temp.getType() == anti_task.getType() 
+                                    and temp.getStartDate == anti_task.getStartDate()
+                                    and temp.getStartTime() == anti_task.getStartTime()
+                                    and temp.getDuration() == anti_task.getDuration()):
+                                        self.tasksList.remove(temp) # we use temp to remove that anti task from our list
+                                        break
+                        else:
+                            #Implementation
+                            conflict = False #Just testing
+                            if conflict:
+                                print(CONFLICT_ERROR)
+                            else:
                                 if input("Type 'Y' to confirmed delete:") == 'Y':
                                     self._tasksList.remove(task)
-                                break
-                        
-                        for type in RECURRING_TASKS:
-                            if task.getType() == type:
-                                #stuff stuff stuff
-                        
-                        if task.getType() == ANTI_TASKS[0]:
-                            #stuff stuff
 
                         running = False
                         input("Press enter to exit")
-                        # todo delete here, but need to check for conflict
-                        
-                            
-
+                        break
 
                 else:
                     print(f"No task with name: {name_input} is found.")
