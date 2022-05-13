@@ -23,19 +23,60 @@ class PSS:
         while running:
             printHeader("Create Task")
             print(CREATE_TASK_MENU)
-            option = input("Enter task type: ")
+            option = input("Enter option: ")
             if option == "1":
                 # recurring task
-                pass
+                printHeader("Create Recurring Task")
+
+                taskName = taskType = taskStartDate = taskEndDate = \
+                    taskStartTime = taskDuration = taskFrequency = None
+                try:
+                    while not self.nameVerification(taskName):
+                        taskName = input("Enter the Task Name: ")
+                    while not self.typeVerification(RecurringTask("", 0.0, 0.0, "Sleep", 0, 0, 1), taskType):
+                        print(RECURRING_TASKS)
+                        taskType = input("Enter the type of Recurring Task: ").capitalize()
+                    while not self.dateVerification(taskStartDate):
+                        taskStartDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                    while not self.dateVerification(taskEndDate):
+                        taskEndDate = int(input("Enter the End Date of the Task (YYYYMMDD): "))
+                    while not self.timeVerification(taskStartTime):
+                        taskStartTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                    while not self.durationVerification(taskDuration):
+                        taskDuration = float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+                    while not self.frequencyVerification(taskFrequency):
+                        taskFrequency = int(input("Enter the Frequency of the Task (1 for daily, 7 for weekly): "))
+                except ValueError:
+                    continue
+
+                newRecurringTask = RecurringTask(taskName, taskDuration, taskStartTime,
+                    taskType, taskStartDate, taskEndDate, taskFrequency)
+                
+                newRecurringTask.displayTask()
+
+                if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
+                    if not self.taskVerification(newRecurringTask):
+                        print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
+                    else:
+                        self._tasksList.append(newRecurringTask)
+                        print("Task added to the schedule!")
+                    input("Press enter to exit...")
+                else:
+                    print("Task was not created.")
+
             elif option == "2":
                 # transient task
+                printHeader("Create Transient Task")
 
                 taskName = input("Enter the Task Name: ")
                 print(TRANSIENT_TASKS)
                 taskType = input("Enter the type of Transient Task: ").capitalize()
-                taskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
-                taskTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
-                taskDuration= float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+                try:
+                    taskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
+                    taskTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                    taskDuration= float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+                except ValueError:
+                    continue
 
                 newTransientTask = TransientTask(taskName, taskDuration, taskTime, taskType, taskDate)
 
@@ -61,21 +102,45 @@ class PSS:
                 if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
                     if self.taskVerification(newTransientTask) == False:
                         print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
-                        time.sleep(3)
                     else:
                         self._tasksList.append(newTransientTask)
                         print("Task added to the schedule!")
-                        time.sleep(3)
+                    input("Press enter to exit...")
                 else:
                     print("Task was not created.")
-                # pass
             elif option == "3":
                 # anti-task
-                pass
+                printHeader("Create Anti Task")
+
+                taskName = taskDate = taskStartTime = taskDuration = None
+                try:
+                    while not self.nameVerification(taskName):
+                        taskName = input("Enter the Task Name: ")
+                    while not self.dateVerification(taskDate):
+                        taskDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                    while not self.timeVerification(taskStartTime):
+                        taskStartTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                    while not self.durationVerification(taskDuration):
+                        taskDuration = float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+                except ValueError:
+                    continue
+
+                newAntiTask = AntiTask(taskName, taskDuration, taskStartTime, taskDate)
+                newAntiTask.displayTask()
+
+                if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
+                    if not self.taskVerification(newAntiTask):
+                        print("Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
+                    else:
+                        self._tasksList.append(newAntiTask)
+                        print("Task added to the schedule!")
+                    input("Press enter to exit...")
+                else:
+                    print("Task was not created.")
             elif option == "4":
                 running = False
             else:
-                print("Invalid option")
+                print("Invalid option")    
                 continue
 
     def findTask(self) -> None:
@@ -91,7 +156,7 @@ class PSS:
                 for task in self._tasksList:
                     if task.getName() == name_input:
                         task.displayTask()
-                        input("Press enter to exit")
+                        input("Press enter to exit...")
                         running = False
                         break
                 else:
@@ -155,7 +220,7 @@ class PSS:
                 for task in self._tasksList:
                     if task.getName() == name_input:
                         print(task)
-                        input("Press enter to exit")
+                        input("Press enter to exit...")
                         # todo edit here, check conflict still
                         running = False
                         break
@@ -274,7 +339,7 @@ class PSS:
                 elif isinstance(task, TransientTask):
                     result_task_list.append(task)
 
-            # sorting
+            # todo sorting
 
             # dumps processed tasks to file
             with open(file_path, "w") as file:
@@ -354,7 +419,7 @@ class PSS:
         """
         printHeader("View Schedule")
         print(DAY_WEEK_MONTH_MENU)
-        duration_input = input("Enter options number: ")
+        duration_input = input("Enter options: ")
         if duration_input == "1":
             duration = "day"
         elif duration_input == "2":
@@ -366,7 +431,8 @@ class PSS:
 
         start_date = None
         while not self.dateVerification(start_date):
-            start_date_input = input("Enter a start date in YYYYMMDD format (all for all, empty to exit): ")
+            printHeader("View Schedule")
+            start_date_input = input("Enter a start date in YYYYMMDD format (empty to exit): ")
             try:
                 start_date = int(start_date_input)
             except ValueError:
@@ -427,7 +493,8 @@ class PSS:
                 if task.getFrequency() == 1:
                     # daily
                     counter = 1
-                    for day in range(start_date, end_year * 10000 + end_month * 100 + end_day):
+                    temp_end_date = end_year * 10000 + end_month * 100 + end_day
+                    for day in range(start_date, temp_end_date):
                         if self.dateVerification(day):
                             result_task_list.append(RecurringTask(task.getName() + str(counter),
                                 task.getDuration(), task.getStartTime(), task.getType(),
@@ -436,19 +503,21 @@ class PSS:
                 else:
                     # weekly
                     counter = 1
-                    for day in range(start_date, end_year * 10000 + end_month * 100 + end_day, 7):
-                        if self.dateVerification(day):
+                    temp_end_date = end_year * 10000 + end_month * 100 + end_day
+                    for day in range(start_date, temp_end_date, 7):
+                        if self.dateVerification(day) and task.getEndDate() > day:
                             result_task_list.append(RecurringTask(task.getName() + str(counter),
                                 task.getDuration(), task.getStartTime(), task.getType(),
                                 day, day, 1))
                         counter += 1
             elif isinstance(task, TransientTask):
-                result_task_list.append(task)
+                if task.getDate() >= start_date and task.getDate() <= end_year * 10000 + end_month * 100 + end_day:
+                    result_task_list.append(task)
         
         for task in result_task_list:
             task.displayTask()
             print()
-        input("Press enter to go continue...")
+        input("Press enter to exit...")
 
     def fileVerification(self, file_path: str) -> bool:
         """Check if the file is exists or not"""
@@ -594,7 +663,7 @@ class PSS:
                     other_date = other_task.getPythonFormatedDate(other_task.getDate())
 
                     #check if they could occur on the same day
-                    if((task.dateClassification(task_start_date) == 
+                    if((task.dateClassification(task.getStartDate()) == 
                         other_task.dateClassification(other_task.getDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
                         (task.getFrequency() == 7 and (task_start_date <= other_date and task_end_date >= other_date))):
@@ -622,7 +691,7 @@ class PSS:
                     other_task_end_date = other_task.getPythonFormatedDate(other_task.getEndDate())
 
                     #check if they could occur on the same day
-                    if((task.dateClassification(task.getDate) == 
+                    if((task.dateClassification(task.getDate()) == 
                         other_task.dateClassification(other_task.getStartDate())) or
                         #can also occur on same day if there is Transient task in the time fram of a Recurring task everyday
                         (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
@@ -702,7 +771,7 @@ class PSS:
                     other_end_date = other_task.getPythonFormatedDate(other_task.getEndDate())
 
                     #check if they could occur on the same day
-                    if((task.dateClassification(task_date) == 
+                    if((task.dateClassification(task.getDate()) == 
                         other_task.dateClassification(other_task.getStartDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
                         (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
@@ -759,6 +828,8 @@ class PSS:
         Time must be a positive number from 0 to 23.75
         round to nearest 15 mins (0.25)
         """
+        if not time:
+            return False
         temp_time: float = time * 100
         if temp_time % 25 != 0:
             return False
@@ -768,7 +839,7 @@ class PSS:
 
     def nameVerification(self, task_name: str) -> bool:
         """Return True if name is unique, else False"""
-        if task_name == "":
+        if task_name == "" or task_name == None:
             return False
 
         for task in self._tasksList:
@@ -779,6 +850,8 @@ class PSS:
 
     def durationVerification(self, task_duration: float) -> bool:
         """Check whether the duration is valid or not."""
+        if not task_duration:
+            return False
         temp_duration: float = task_duration * 100
         if temp_duration < 0 or temp_duration > 2375:
             return False
@@ -787,6 +860,8 @@ class PSS:
     def typeVerification(self, task: RecurringTask or TransientTask or AntiTask,
             type: str) -> bool:
         """Check whether the type is valid or not."""
+        if not type:
+            return False
         if isinstance(task, RecurringTask):
             if type not in RECURRING_TASKS:
                 return False
@@ -802,6 +877,8 @@ class PSS:
         
     def frequencyVerification(self, frequency: int) -> bool:
         """Check whether the frequency is valid or not."""
+        if not frequency:
+            return False
         if frequency not in FREQUENCIES:
             return False
         return True
