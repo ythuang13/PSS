@@ -117,13 +117,10 @@ class PSS:
                                 self._tasksList.remove(task)
                         elif isinstance(task, RecurringTask):
                             if input("An anti task associated with task will also be deleted.\nType 'Y' to confirmed delete:") == 'Y':
-                                temp = RecurringTask(task)  #We make a copy of task to temp
+                                temp = AntiTask(task.getName(), task.getDuration(), task.getStartTime(), task.getStartDate())  #We make a copy of task to temp
                                 self._tasksList.remove(task)  # we remove that task in our list
                                 for anti_task in self._tasksList and isinstance(anti_task, AntiTask):   #We check if there's an anti task associated with this task
-                                    if (temp.getType() == anti_task.getType() 
-                                    and temp.getStartDate == anti_task.getStartDate()
-                                    and temp.getStartTime() == anti_task.getStartTime()
-                                    and temp.getDuration() == anti_task.getDuration()):
+                                    if anti_task is temp:
                                         self.tasksList.remove(temp) # we use temp to remove that anti task from our list
                                         break
                         else:
