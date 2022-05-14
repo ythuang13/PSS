@@ -783,8 +783,7 @@ class PSS:
                         other_end_time = other_start_time + other_task.getDuration()
                         
                         #check if the times of the class overlap
-                        if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
-                            (task_start_time >= other_end_time and task_end_time > other_end_time))):
+                        if(not(task_start_time == other_start_time and task_end_time == other_end_time)):
                             return False
 
                 #check AntiTask against TransientTask
