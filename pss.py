@@ -230,11 +230,14 @@ class PSS:
                         if task.getType() == "Class" or task.getType() == "Study" or task.getType() == "Sleep" or task.getType() == "Exercise" or task.getType() == "Work" or task.getType() == "Meal":
                             tempTask = RecurringTask(task.getName(), task.getDuration(), task.getStartTime(), task.getType(), task.getStartDate(), task.getEndDate(), task.getFrequency())
                             tempTask.displayTask()
+                            print("")
+
                             self._tasksList.remove(task)
 
                             newTaskName = newTaskType = newTaskStartDate = newTaskEndDate = \
                                 newTaskStartTime = newTaskDuration = newTaskFrequency = None
 
+                            print(EDIT_RECURRING)
                             edit_input = input("Enter options: ")
                             if edit_input == "1":  # Edit name
                                 while not self.nameVerification(newTaskName):
@@ -280,11 +283,13 @@ class PSS:
                         elif task.getType() == "Visit" or task.getType() == "Shopping" or task.getType() == "Appointment":
                             tempTask = TransientTask(task.getName(), task.getDuration(), task.getStartTime(), task.getType(), task.getDate())
                             tempTask.displayTask()
+                            print("")
 
                             self._tasksList.remove(task)
 
                             newTaskName = newTaskType = newTaskDate = newTaskStartTime = newTaskDuration = None
 
+                            print(EDIT_TRANSIENT)
                             edit_input = input("Enter options: ")
                             if edit_input == "1":  # Edit name
                                 while not self.nameVerification(newTaskName):
@@ -294,12 +299,12 @@ class PSS:
                             elif edit_input == "2":  # Edit task type
                                 while not self.typeVerification(tempTask, newTaskType):
                                     print(TRANSIENT_TASKS)
-                                    newTaskType = input("Enter the type of Recurring Task: ").capitalize()
+                                    newTaskType = input("Enter the type of Transient Task: ").capitalize()
                                 newTask = TransientTask(task.getName(), task.getDuration(), task.getStartTime(),
                                                         newTaskType, task.getDate())
                             elif edit_input == "3":  # Edit dates
                                 while not self.dateVerification(newTaskDate):
-                                    newTaskDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                                    newTaskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
                                 newTask = TransientTask(task.getName(), task.getDuration(), task.getStartTime(),
                                                         task.getType(), newTaskDate)
                             elif edit_input == "4":  # Edit time
@@ -323,10 +328,13 @@ class PSS:
                             tempTask = AntiTask(task.getName(), task.getDuration(), task.getStartTime(),
                                                        task.getDate())
                             tempTask.displayTask()
+                            print("")
+
                             self._tasksList.remove(task)
 
                             newTaskName = newTaskDate = None
 
+                            print(EDIT_ANTITASK )
                             edit_input = input("Enter options: ")
                             if edit_input == "1":  # Edit name
                                 while not self.nameVerification(newTaskName):
@@ -335,7 +343,7 @@ class PSS:
                                                        task.getDate())
                             elif edit_input == "2":  # Edit date NEED DATE CHECK WITH RECURRING
                                 while not self.dateVerification(newTaskDate):
-                                    newTaskDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                                    newTaskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
                                 newTask = AntiTask(task.getName(), task.getDuration(), task.getStartTime(),
                                                        newTaskDate)
                             else:

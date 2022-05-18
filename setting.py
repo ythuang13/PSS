@@ -36,6 +36,28 @@ RECURRING_TASKS = [
     "Meal"
 ]
 
+EDIT_RECURRING = """Editing Recurring Task -
+1. Change the Name
+2. Change the Type
+3. Change the Date
+4. Change the Start Time 
+5. Change the Duration Time
+6. Change the Frequency
+"""
+
+EDIT_TRANSIENT ="""Editing Transient Task -
+1. Change the Name
+2. Change the Type
+3. Change the Date
+4. Change the Start Time
+5. Change the Duration
+"""
+
+EDIT_ANTITASK ="""Editing Anti-Task -
+1. Change the Name
+2. Chang the Date
+3. Month
+"""
 
 TRANSIENT_TASKS = [
     "Visit",

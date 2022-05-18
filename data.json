@@ -39,7 +39,7 @@
         "Duration": 0.75
     },
     {
-        "Name": "Shop",
+        "Name": "Shops",
         "Type": "Visit",
         "Date": 20001212,
         "StartTime": 10.0,
