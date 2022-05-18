@@ -181,21 +181,40 @@ class PSS:
                             if input("Type 'Y' to confirmed delete:") == 'Y':
                                 self._tasksList.remove(task)
                         elif isinstance(task, RecurringTask):
-                            if input("An anti task associated with this task will also be deleted.\nType 'Y' to confirmed delete:") == 'Y':
+                            if input("Any anti task associated with this task will also be deleted.\nType 'Y' to confirmed delete:") == 'Y':
+                                for anti_task in self._tasksList and isinstance(anti_task, AntiTask):
+                                    if (anti_task.getDate() >= task.getStartDate() and anti_task.getDate() <= task.getEndDate() and
+                                    task.getDuration() == anti_task.getDuration and task.getStartTime() == anti_task.getStartTime()):
+                                        self._tasksList.remove(anti_task)
+                                        break
+                                self._tasksList.remove(task)
                                 #We make a copy of task to temp
-                                temp = AntiTask(task.getName(), task.getDuration(), task.getStartTime(), task.getStartDate())
+                                #temp = AntiTask("To be removed", task.getDuration(), task.getStartTime(), task.getStartDate())
 
                                 # we remove that task in our list
-                                self._tasksList.remove(task)  
+                               # self._tasksList.remove(task)  
 
                                 #We check if there's an anti task associated with this task
-                                for anti_task in self._tasksList and isinstance(anti_task, AntiTask):   
-                                    if anti_task is temp:
-                                        self.tasksList.remove(temp) # we use temp to remove that anti task from our list
-                                        break
+                                #for anti_task in self._tasksList and isinstance(anti_task, AntiTask):   
+                                    #if anti_task.getDuration:
+                                      #  self.tasksList.remove(temp) # we use temp to remove that anti task from our list
+                                       # break
                         else:
                             #Implementation
-                            something = False
+                            #something = False
+                            anti_task_temp = AntiTask(task) # will store this task in temp variable
+                            self._tasksList.remove(task) # task is removed from the list
+                            counter = 0 # counts how many task will cause a conflict if anti task is deleted
+                            for anyTask in self._tasksList: 
+                                if self.overlapVerification(anyTask):
+                                    ++counter
+                                    print("%s", anyTask.getName())
+                            if counter > 0:
+                                print("These %d task(s) will cause conflict if %s anti-task is deleted\n", counter, anti_task_temp.getName())
+                                print("Thus, this task will not be deleted")
+                            else:
+                                if input("This task is about to be deleted. Type 'Y' to confirmed delete") != 'Y':
+                                    self._tasksList.append(anti_task_temp)
                         running = False
                         input("Press enter to exit")
                         break
