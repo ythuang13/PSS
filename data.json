@@ -23,19 +23,19 @@
         "Duration": 0.75
     },
     {
-        "Name": "a",
+        "Name": "nowalks",
+        "Type": "Cancellation",
+        "Date": 20200516,
+        "StartTime": 10.25,
+        "Duration": 0.75
+    },
+    {
+        "Name": "b",
         "Type": "Class",
         "StartDate": 20201122,
         "StartTime": 1.0,
         "Duration": 1.0,
         "EndDate": 20211122,
         "Frequency": 1
-    },
-    {
-        "Name": "nowalks",
-        "Type": "Cancellation",
-        "Date": 20200516,
-        "StartTime": 10.25,
-        "Duration": 0.75
     }
 ]
