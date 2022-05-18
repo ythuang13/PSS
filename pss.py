@@ -2,7 +2,7 @@ import json
 import datetime
 from datetime import date
 import calendar
-import string;
+import string
 import time
 from task import RecurringTask, TransientTask, AntiTask, TaskEncoder
 from setting import *
