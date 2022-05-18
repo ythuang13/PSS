@@ -7,28 +7,35 @@
         "Duration": 0.75
     },
     {
-        "Name": "Take a walk",
-        "Type": "Exercise",
-        "StartDate": 20200416,
-        "StartTime": 10.25,
-        "Duration": 0.75,
-        "EndDate": 20200715,
-        "Frequency": 7
-    },
-    {
         "Name": "No walk",
         "Type": "Cancellation",
-        "Date": 20200423,
+        "Date": 20190423,
         "StartTime": 10.25,
         "Duration": 0.75
     },
     {
         "Name": "b",
         "Type": "Meal",
-        "StartDate": 20201122,
-        "StartTime": 1.0,
-        "Duration": 1.0,
-        "EndDate": 20211122,
+        "StartDate": 20211122,
+        "StartTime": 10.25,
+        "Duration": 0.75,
+        "EndDate": 20211212,
+        "Frequency": 1
+    },
+    {
+        "Name": "Shops",
+        "Type": "Visit",
+        "Date": 20001212,
+        "StartTime": 10.0,
+        "Duration": 10.0
+    },
+    {
+        "Name": "Take a walk",
+        "Type": "Exercise",
+        "StartDate": 20200416,
+        "StartTime": 10.25,
+        "Duration": 0.75,
+        "EndDate": 20200715,
         "Frequency": 1
     },
     {
@@ -37,12 +44,5 @@
         "Date": 20200516,
         "StartTime": 10.25,
         "Duration": 0.75
-    },
-    {
-        "Name": "Shop",
-        "Type": "Visit",
-        "Date": 20001212,
-        "StartTime": 10.0,
-        "Duration": 10.0
     }
 ]
