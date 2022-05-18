@@ -227,9 +227,8 @@ class PSS:
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
-                        if task.getType == "Class" or "Study" or "Sleep" or "Exercise" or "Work" or "Meal":
-                            tempTask = RecurringTask(task.getName(), task.getDuration(), task.getStartTime(),
-                                                              task.getType(), task.getStartDate(), task.getEndDate(), task.getFrequency())
+                        if task.getType() == "Class" or task.getType() == "Study" or task.getType() == "Sleep" or task.getType() == "Exercise" or task.getType() == "Work" or task.getType() == "Meal":
+                            tempTask = RecurringTask(task.getName(), task.getDuration(), task.getStartTime(), task.getType(), task.getStartDate(), task.getEndDate(), task.getFrequency())
                             tempTask.displayTask()
                             self._tasksList.remove(task)
 
@@ -276,20 +275,71 @@ class PSS:
 
 
 
-                        elif task.getType == "Visit" or "Shopping" or "Appointment":
-                            print("Transient")
-                            tempTransientTask = TransientTask(task.getName(), task.getDuration(), task.getStartTime(), task.getType(), task.getDate())
-                            tempTransientTask.displayTask()
 
 
-                        elif task.getType == "Cancellation":
-                            print("Cancel")
-                            tempAntiTask = AntiTask(task.getName(), task.getDuration(), task.getStartTime(), task.getDate())
-                            tempAntiTask.displayTask()
+                        elif task.getType() == "Visit" or task.getType() == "Shopping" or task.getType() == "Appointment":
+                            tempTask = TransientTask(task.getName(), task.getDuration(), task.getStartTime(), task.getType(), task.getDate())
+                            tempTask.displayTask()
+
+                            self._tasksList.remove(task)
+
+                            newTaskName = newTaskType = newTaskDate = newTaskStartTime = newTaskDuration = None
+
+                            edit_input = input("Enter options: ")
+                            if edit_input == "1":  # Edit name
+                                while not self.nameVerification(newTaskName):
+                                    newTaskName = input("Enter the Task Name: ")
+                                newTask = TransientTask(newTaskName, task.getDuration(), task.getStartTime(),
+                                                        task.getType(), task.getDate())
+                            elif edit_input == "2":  # Edit task type
+                                while not self.typeVerification(tempTask, newTaskType):
+                                    print(TRANSIENT_TASKS)
+                                    newTaskType = input("Enter the type of Recurring Task: ").capitalize()
+                                newTask = TransientTask(task.getName(), task.getDuration(), task.getStartTime(),
+                                                        newTaskType, task.getDate())
+                            elif edit_input == "3":  # Edit dates
+                                while not self.dateVerification(newTaskDate):
+                                    newTaskDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                                newTask = TransientTask(task.getName(), task.getDuration(), task.getStartTime(),
+                                                        task.getType(), newTaskDate)
+                            elif edit_input == "4":  # Edit time
+                                while not self.timeVerification(newTaskStartTime):
+                                    newTaskStartTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                                newTask = TransientTask(task.getName(), task.getDuration(), newTaskStartTime,
+                                                        task.getType(), task.getDate())
+                            elif edit_input == "5":  # Edit duration
+                                while not self.durationVerification(newTaskDuration):
+                                    newTaskDuration = float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+                                newTask = TransientTask(task.getName(), newTaskDuration, task.getStartTime(),
+                                                        task.getType(), task.getDate())
+                            else:
+                                return
 
 
 
 
+
+                        elif task.getType() == "Cancellation":
+                            tempTask = AntiTask(task.getName(), task.getDuration(), task.getStartTime(),
+                                                       task.getDate())
+                            tempTask.displayTask()
+                            self._tasksList.remove(task)
+
+                            newTaskName = newTaskDate = None
+
+                            edit_input = input("Enter options: ")
+                            if edit_input == "1":  # Edit name
+                                while not self.nameVerification(newTaskName):
+                                    newTaskName = input("Enter the Task Name: ")
+                                newTask = AntiTask(newTaskName, task.getDuration(), task.getStartTime(),
+                                                       task.getDate())
+                            elif edit_input == "2":  # Edit date NEED DATE CHECK WITH RECURRING
+                                while not self.dateVerification(newTaskDate):
+                                    newTaskDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                                newTask = AntiTask(task.getName(), task.getDuration(), task.getStartTime(),
+                                                       newTaskDate)
+                            else:
+                                return
 
 
 
@@ -772,6 +822,7 @@ class PSS:
         #Comparing TransientTasks against other tasks
         elif isinstance(task, TransientTask):
             for other_task in self._tasksList:
+                all_three_check = True
                 #Check if Transient task overlaps with recurring task
                 if isinstance(other_task, RecurringTask):
 
@@ -795,10 +846,10 @@ class PSS:
                                 #get the date of the anti-task
                                 anti_task_date = task.getPythonFormatedDate(task.getDate())
 
-                                if((other_task.dateClassification(task_start_date) == 
+                                if((other_task.dateClassification(other_task_start_date) ==
                                     anti_task.dateClassification(anti_task.getDate())) or
                                     #can also occur on same day if there is RecurringTask everyday with an AntiTask in those dates
-                                    (other_task.getFrequency() == 7 and (task_start_date <= anti_task_date and task_end_date >= anti_task_date))):
+                                    (other_task.getFrequency() == 7 and (other_task_start_date <= anti_task_date and other_task_end_date >= anti_task_date))):
 
                                     #get start and end times of both tasks
                                     anti_task_start_time = anti_task.getStartTime()
