@@ -116,22 +116,21 @@ class PSS:
                             if input("Type 'Y' to confirmed delete:") == 'Y':
                                 self._tasksList.remove(task)
                         elif isinstance(task, RecurringTask):
-                            if input("An anti task associated with task will also be deleted.\nType 'Y' to confirmed delete:") == 'Y':
-                                temp = AntiTask(task.getName(), task.getDuration(), task.getStartTime(), task.getStartDate())  #We make a copy of task to temp
-                                self._tasksList.remove(task)  # we remove that task in our list
-                                for anti_task in self._tasksList and isinstance(anti_task, AntiTask):   #We check if there's an anti task associated with this task
+                            if input("An anti task associated with this task will also be deleted.\nType 'Y' to confirmed delete:") == 'Y':
+                                #We make a copy of task to temp
+                                temp = AntiTask(task.getName(), task.getDuration(), task.getStartTime(), task.getStartDate())
+
+                                # we remove that task in our list
+                                self._tasksList.remove(task)  
+
+                                #We check if there's an anti task associated with this task
+                                for anti_task in self._tasksList and isinstance(anti_task, AntiTask):   
                                     if anti_task is temp:
                                         self.tasksList.remove(temp) # we use temp to remove that anti task from our list
                                         break
                         else:
                             #Implementation
-                            conflict = False #Just testing
-                            if conflict:
-                                print(CONFLICT_ERROR)
-                            else:
-                                if input("Type 'Y' to confirmed delete:") == 'Y':
-                                    self._tasksList.remove(task)
-
+                            something = False
                         running = False
                         input("Press enter to exit")
                         break
