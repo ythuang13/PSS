@@ -21,5 +21,14 @@
         "Date": 20200423,
         "StartTime": 10.25,
         "Duration": 0.75
+    },
+    {
+        "Name": "a",
+        "Type": "Sleep",
+        "StartDate": 20200416,
+        "StartTime": 1.0,
+        "Duration": 1.0,
+        "EndDate": 20200715,
+        "Frequency": 7
     }
 ]

@@ -212,15 +212,90 @@ class PSS:
         running = True
         while running:
             printHeader("Edit Task")
-
             name_input = input("Enter the name of the task to edit (empty to exit): ")
             if name_input == "":
                 return 
             else:
                 for task in self._tasksList:
                     if task.getName() == name_input:
-                        print(task)
-                        input("Press enter to exit...")
+                        task.displayTask()
+
+                        taskName = task.getName()
+                        taskType = task.getType()
+                        taskStartDate = task.getStartDate()
+                        taskEndDate = task.getEndDate()
+                        taskStartTime = task.getStartTime()
+                        taskDuration = task.getDuration()
+                        taskFrequency = task.getFrequency()
+
+                        tempRecurringTask = RecurringTask(taskName, taskDuration, taskStartTime,
+                    taskType, taskStartDate, taskEndDate, taskFrequency)
+
+                        tempRecurringTask.displayTask()
+                        self._tasksList.remove(task)
+
+                        newTaskName = newTaskType = newTaskStartDate = newTaskEndDate = \
+                            newTaskStartTime = newTaskDuration = newTaskFrequency = None
+
+                        edit_input = input("Enter options: ")
+                        if edit_input == "1": #Edit name
+                            while not self.nameVerification(newTaskName):
+                                newTaskName = input("Enter the Task Name: ")
+                            newRecurringTask = RecurringTask(taskName, taskDuration, taskStartTime,
+                                                         taskType, taskStartDate, taskEndDate, taskFrequency)
+
+                        elif edit_input == "2": #Edit dates
+                            while not self.dateVerification(newTaskStartDate):
+                                newTaskStartDate = int(input("Enter the Start Date of the Task (YYYYMMDD): "))
+                            while not self.dateVerification(newTaskEndDate):
+                                newTaskEndDate = int(input("Enter the End Date of the Task (YYYYMMDD): "))
+                            newRecurringTask = RecurringTask(taskName, taskDuration, taskStartTime,
+                                                         taskType, newTaskStartDate, newTaskEndDate, taskFrequency)
+
+                        elif edit_input == "3": #Edit time
+                            while not self.timeVerification(newTaskStartTime):
+                                newTaskStartTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
+                            newRecurringTask = RecurringTask(taskName, taskDuration, newTaskStartTime,
+                                                         taskType, taskStartDate, taskEndDate, taskFrequency)
+
+                        elif edit_input == "4": #Edit duration
+                            while not self.durationVerification(newTaskDuration):
+                                newTaskDuration = float(input("Enter the Duration Time of the Task (0 - 23.75): "))
+                            newRecurringTask = RecurringTask(taskName, newTaskDuration, taskStartTime,
+                                                         taskType, taskStartDate, taskEndDate, taskFrequency)
+
+                        elif edit_input == "5": #Edit frequency
+                            while not self.frequencyVerification(newTaskFrequency):
+                                newTaskFrequency = int(
+                                    input("Enter the Frequency of the Task (1 for daily, 7 for weekly): "))
+                            newRecurringTask = RecurringTask(taskName, taskDuration, taskStartTime,
+                                                         taskType, taskStartDate, taskEndDate, newTaskFrequency)
+
+                        elif edit_input == "6":  # Edit task type
+                            while not self.typeVerification(RecurringTask("", 0.0, 0.0, "Sleep", 0, 0, 1), newTaskType):
+                                print(RECURRING_TASKS)
+                                newTaskType = input("Enter the type of Recurring Task: ").capitalize()
+                            newRecurringTask = RecurringTask(taskName, taskDuration, taskStartTime,
+                                                        newTaskType, taskStartDate, taskEndDate, taskFrequency)
+                        else:
+                            return
+
+
+                        newRecurringTask.displayTask()
+
+                        if input("Confirm Task Creation (Y or N)? ").capitalize() == "Y":
+                            if not self.taskVerification(newRecurringTask):
+                                print(
+                                    "Sorry, unable to create task. Possible incorrect data or overlapping with another task.")
+                                self._tasksList.append(tempRecurringTask)
+                            else:
+                                self._tasksList.append(newRecurringTask)
+                                print("Task added to the schedule!")
+                            input("Press enter to exit...")
+                        else:
+                            print("Task was not created.")
+
+
                         # todo edit here, check conflict still
                         running = False
                         break
