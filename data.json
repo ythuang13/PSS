@@ -24,11 +24,18 @@
     },
     {
         "Name": "a",
-        "Type": "Sleep",
-        "StartDate": 20200416,
+        "Type": "Class",
+        "StartDate": 20201122,
         "StartTime": 1.0,
         "Duration": 1.0,
-        "EndDate": 20200715,
-        "Frequency": 7
+        "EndDate": 20211122,
+        "Frequency": 1
+    },
+    {
+        "Name": "nowalks",
+        "Type": "Cancellation",
+        "Date": 20200516,
+        "StartTime": 10.25,
+        "Duration": 0.75
     }
 ]

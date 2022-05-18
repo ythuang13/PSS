@@ -849,7 +849,7 @@ class PSS:
                     if((task.dateClassification(task.getDate()) == 
                         other_task.dateClassification(other_task.getStartDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
-                        (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
+                        (other_task.getFrequency() == 7 and (other_start_date <= task_date and other_end_date >= task_date))):
 
                         #get start and end times of both tasks
                         task_start_time = task.getStartTime()
