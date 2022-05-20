@@ -412,9 +412,13 @@ class PSS:
             if not self.fileVerification(file_path):
                 open(file_path, 'w').close()
 
+            # sort
+            temp_list = sorted(self._tasksList,
+                key=lambda x: x.getStartDate() if isinstance(x, RecurringTask) else x.getDate())
+
             # dumps json to file
             with open(file_path, "w") as file:
-                file.write(json.dumps(self._tasksList, indent=4, cls=TaskEncoder))
+                file.write(json.dumps(temp_list, indent=4, cls=TaskEncoder))
         else:
             print(DAY_WEEK_MONTH_MENU)
             duration_input = input("Enter options number: ")
@@ -510,10 +514,12 @@ class PSS:
                     result_task_list.append(task)
 
             # todo sorting
+            temp_list = sorted(self._tasksList,
+                key=lambda x: x.getStartDate() if isinstance(x, RecurringTask) else x.getDate())
 
             # dumps processed tasks to file
             with open(file_path, "w") as file:
-                file.write(json.dumps(result_task_list, indent=4, cls=TaskEncoder))
+                file.write(json.dumps(temp_list, indent=4, cls=TaskEncoder))
             
 
     def readFromFile(self, default=False) -> bool:
@@ -541,6 +547,8 @@ class PSS:
         # load in date in pss
         data = json.loads(json_string)
         # loop through data to determine if it can be load in pss
+        allrightFlag = True
+        temporaryList = []
         for task in data:
             task_name = task.get('Name', None)
             task_duration = task.get('Duration', None)
@@ -576,9 +584,15 @@ class PSS:
                 # invalid task type, big no no
                 pass
 
-            # if task verified, load into pss
-            if self.taskVerification(new_task):
-                self._tasksList.append(new_task)
+            if not self.taskVerification(new_task):
+                allrightFlag = False
+                return False
+            else:
+                temporaryList.append(new_task)
+
+        # if task verified, load into pss
+        for task in temporaryList:
+            self._tasksList.append(task)
         
         return True
 
