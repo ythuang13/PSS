@@ -8,7 +8,7 @@ class Task():
     def __init__(self, name: str, duration: float, startTime: float):
         self._name = name
         self._duration = duration
-        self._start_time = startTime
+        self._start_time = float(startTime)
         assert isinstance(self._name, str)
         assert isinstance(self._duration, float)
         assert isinstance(self._start_time, float)
