@@ -182,7 +182,7 @@ class PSS:
                     if task.getName() == name_input:
                         task.displayTask()
                         if isinstance(task, TransientTask):
-                            if input("Type 'Y' to confirmed delete:") == 'Y':
+                            if input("Type 'Y' to confirmed delete: ") == 'Y':
                                 self._tasksList.remove(task)
                         elif isinstance(task, RecurringTask):
                             if input(
@@ -212,7 +212,7 @@ class PSS:
                                 if input("This task is about to be deleted. Type 'Y' to confirmed delete") != 'Y':
                                     self._tasksList.append(anti_task_temp)
                         running = False
-                        input("Press enter to exit")
+                        input("Press enter to exit...")
                         break
 
                 else:
@@ -547,7 +547,7 @@ class PSS:
         # load in date in pss
         data = json.loads(json_string)
         # loop through data to determine if it can be load in pss
-        temporaryList = []
+        self._temporaryTaskList = []
         for task in data:
             task_name = task.get('Name', None)
             task_duration = task.get('Duration', None)
@@ -588,11 +588,12 @@ class PSS:
                 input("Press enter to exit...")
                 return False
             else:
-                temporaryList.append(new_task)
+                self._temporaryTaskList.append(new_task)
 
         # if task verified, load into pss
-        for task in temporaryList:
+        for task in self._temporaryTaskList:
             self._tasksList.append(task)
+        self._temporaryTaskList = []
         
         return True
 
@@ -779,7 +780,7 @@ class PSS:
         #comparing RecurringTasks against other tasks
         if isinstance(task, RecurringTask):
             #run through all other tasks
-            for other_task in self._tasksList:
+            for other_task in self._temporaryTaskList:
                 #check if there is overlap between two recurring tasks
                 if isinstance(other_task, RecurringTask):
 
@@ -865,7 +866,7 @@ class PSS:
           
         #Comparing TransientTasks against other tasks
         elif isinstance(task, TransientTask):
-            for other_task in self._tasksList:
+            for other_task in self._temporaryTaskList:
                 all_three_check = True
                 #Check if Transient task overlaps with recurring task
                 if isinstance(other_task, RecurringTask):
@@ -947,7 +948,7 @@ class PSS:
         #Comparing AntiTask agaisnt other tasks 
         elif isinstance(task, AntiTask):
             found_recurring_flag = False
-            for other_task in self._tasksList:
+            for other_task in self._temporaryTaskList:
 
                 #Check AntiTask against RecurringTask
                 if isinstance(other_task, RecurringTask):
