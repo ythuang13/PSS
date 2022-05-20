@@ -7,7 +7,7 @@ from datetime import date
 class Task():
     def __init__(self, name: str, duration: float, startTime: float):
         self._name = name
-        self._duration = duration
+        self._duration = float(duration)
         self._start_time = float(startTime)
         assert isinstance(self._name, str)
         assert isinstance(self._duration, float)

@@ -72,6 +72,10 @@ class PSS:
                 taskName = input("Enter the Task Name: ")
                 print(TRANSIENT_TASKS)
                 taskType = input("Enter the type of Transient Task: ").capitalize()
+                if taskType not in TRANSIENT_TASKS:
+                    print("Invalid Transient Task Type")
+                    input("Press enter to exit...")
+                    return
                 try:
                     taskDate = int(input("Enter the Date of the Task (YYYYMMDD): "))
                     taskTime = float(input("Enter the Start Time of the Task (0 - 23.75): "))
@@ -872,14 +876,14 @@ class PSS:
                                 #get the date of the anti-task
                                 anti_task_date = task.getPythonFormatedDate(task.getDate())
 
-                                if((other_task.dateClassification(other_task_start_date) ==
+                                if((other_task.dateClassification(other_task.getStartDate()) ==
                                     anti_task.dateClassification(anti_task.getDate())) or
                                     #can also occur on same day if there is RecurringTask everyday with an AntiTask in those dates
                                     (other_task.getFrequency() == 7 and (other_task_start_date <= anti_task_date and other_task_end_date >= anti_task_date))):
 
                                     #get start and end times of both tasks
                                     anti_task_start_time = anti_task.getStartTime()
-                                    anti_task_end_time = task_start_time + anti_task.getDuration()
+                                    anti_task_end_time = anti_task_start_time + anti_task.getDuration()
                                     other_start_time = other_task.getStartTime()
                                     other_end_time = other_start_time + other_task.getDuration()       
 
@@ -928,6 +932,7 @@ class PSS:
 
         #Comparing AntiTask agaisnt other tasks 
         elif isinstance(task, AntiTask):
+            found_recurring_flag = False
             for other_task in self._tasksList:
 
                 #Check AntiTask against RecurringTask
@@ -951,7 +956,10 @@ class PSS:
                         
                         #check if the times of the class overlap
                         if(not(task_start_time == other_start_time and task_end_time == other_end_time)):
-                            return False
+                            if not found_recurring_flag:
+                                return False
+                        else:
+                            found_recurring_flag = True
 
                 #check AntiTask against TransientTask
                 elif isinstance(other_task, TransientTask):
@@ -1066,7 +1074,7 @@ class PSS:
         
 
         if year % 4 == 0:
-            if day not in range(1, 30):
+            if day not in range(1, 30) and month == 2:
                 return False
         # year check
         # if we need to check year
