@@ -547,7 +547,6 @@ class PSS:
         # load in date in pss
         data = json.loads(json_string)
         # loop through data to determine if it can be load in pss
-        allrightFlag = True
         temporaryList = []
         for task in data:
             task_name = task.get('Name', None)
@@ -585,7 +584,8 @@ class PSS:
                 pass
 
             if not self.taskVerification(new_task):
-                allrightFlag = False
+                print("The schedule can't be load in, invalid or conflict")
+                input("Press enter to exit...")
                 return False
             else:
                 temporaryList.append(new_task)
@@ -1004,6 +1004,9 @@ class PSS:
                         if(not((task_start_time < other_start_time and task_end_time <= other_start_time)or
                             (task_start_time >= other_end_time and task_end_time > other_end_time))):
                             return False
+            else:
+                if not found_recurring_flag:
+                    return False
         #If it is not one of these three classes return False
         else:
             return False
