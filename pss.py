@@ -594,6 +594,9 @@ class PSS:
         for task in self._temporaryTaskList:
             self._tasksList.append(task)
         self._temporaryTaskList = []
+        if not default:
+            print("Schedule loaded successfully")
+            input("Press enter to exit...")
         
         return True
 
@@ -780,7 +783,7 @@ class PSS:
         #comparing RecurringTasks against other tasks
         if isinstance(task, RecurringTask):
             #run through all other tasks
-            for other_task in self._temporaryTaskList:
+            for other_task in self._temporaryTaskList + self._tasksList:
                 #check if there is overlap between two recurring tasks
                 if isinstance(other_task, RecurringTask):
 
@@ -826,7 +829,7 @@ class PSS:
                     if((task.dateClassification(task.getStartDate()) == 
                         other_task.dateClassification(other_task.getDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a TransientTask in those dates
-                        (task.getFrequency() == 7 and (task_start_date <= other_date and task_end_date >= other_date))):
+                        (task.getFrequency() == 1 and (task_start_date <= other_date and task_end_date >= other_date))):
 
                         #get start and end times of both tasks
                         task_start_time = task.getStartTime()
@@ -851,7 +854,7 @@ class PSS:
                     if((task.dateClassification(task.getStartDate()) == 
                         other_task.dateClassification(other_task.getDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
-                        (task.getFrequency() == 7 and (task_start_date <= other_date and task_end_date >= other_date))):
+                        (task.getFrequency() == 1 and (task_start_date <= other_date and task_end_date >= other_date))):
 
                         #get start and end times of both tasks
                         task_start_time = task.getStartTime()
@@ -866,7 +869,7 @@ class PSS:
           
         #Comparing TransientTasks against other tasks
         elif isinstance(task, TransientTask):
-            for other_task in self._temporaryTaskList:
+            for other_task in self._temporaryTaskList + self._tasksList:
                 all_three_check = True
                 #Check if Transient task overlaps with recurring task
                 if isinstance(other_task, RecurringTask):
@@ -880,7 +883,7 @@ class PSS:
                     if((task.dateClassification(task.getDate()) == 
                         other_task.dateClassification(other_task.getStartDate())) or
                         #can also occur on same day if there is Transient task in the time fram of a Recurring task everyday
-                        (other_task.getFrequency() == 7 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
+                        (other_task.getFrequency() == 1 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
 
                         #check if there is an anti-task recurring task and transient at the same time
                         for anti_task in self._tasksList:
@@ -894,7 +897,7 @@ class PSS:
                                 if((other_task.dateClassification(other_task.getStartDate()) ==
                                     anti_task.dateClassification(anti_task.getDate())) or
                                     #can also occur on same day if there is RecurringTask everyday with an AntiTask in those dates
-                                    (other_task.getFrequency() == 7 and (other_task_start_date <= anti_task_date and other_task_end_date >= anti_task_date))):
+                                    (other_task.getFrequency() == 1 and (other_task_start_date <= anti_task_date and other_task_end_date >= anti_task_date))):
 
                                     #get start and end times of both tasks
                                     anti_task_start_time = anti_task.getStartTime()
@@ -948,7 +951,7 @@ class PSS:
         #Comparing AntiTask agaisnt other tasks 
         elif isinstance(task, AntiTask):
             found_recurring_flag = False
-            for other_task in self._temporaryTaskList:
+            for other_task in self._temporaryTaskList + self._tasksList:
 
                 #Check AntiTask against RecurringTask
                 if isinstance(other_task, RecurringTask):
@@ -961,7 +964,7 @@ class PSS:
                     if((task.dateClassification(task.getDate()) == 
                         other_task.dateClassification(other_task.getStartDate())) or
                         #can also occur on same day if there is RecurringTask everyday with a AntiTask in those dates
-                        (other_task.getFrequency() == 7 and (other_start_date <= task_date and other_end_date >= task_date))):
+                        (other_task.getFrequency() == 1 and (other_start_date <= task_date and other_end_date >= task_date))):
 
                         #get start and end times of both tasks
                         task_start_time = task.getStartTime()
