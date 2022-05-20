@@ -886,7 +886,7 @@ class PSS:
                         (other_task.getFrequency() == 1 and (other_task_start_date <= task_date and other_task_end_date >= task_date))):
 
                         #check if there is an anti-task recurring task and transient at the same time
-                        for anti_task in self._tasksList:
+                        for anti_task in self._tasksList + self._temporaryTaskList:
                             if isinstance(anti_task, AntiTask): 
 
                                 #if there all three tasks exist at the same time
